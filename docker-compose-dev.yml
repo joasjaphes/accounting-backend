@@ -1,0 +1,25 @@
+version: '3.3'
+
+services:
+  accounting-db:
+    image: postgres:latest
+    container_name: accounting-db
+    network_mode: 'host'
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSQORD: postgres
+      POSTGRES_DB: accounting
+      POSTGRES_HOST_AUTH_METHOD: trust
+
+  accounting-backend:
+    image: node:16
+    container_name: accounting-backend
+    working_dir: /app
+    command: bash -c "npm run start"
+    ports:
+      - "4300:3000"
+    network_mode: 'host'
+    depends_on:
+      - accounting-db
+    volumes:
+      - .:/app
