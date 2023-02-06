@@ -1,8 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { User } from '../auth/user.entity';
-import { TransactionDto } from './dtos/transaction.dto';
-import { TransactionEntity } from './transaction.entity';
-import { TransactionRepository } from './transaction.repository';
+import { User } from '../entities/user.entity';
+import { TransactionDto } from '../dtos/transaction.dto';
+import { TransactionEntity } from '../entities/transaction.entity';
+import { TransactionRepository } from '../repository/transaction.repository';
 
 @Injectable()
 export class TransactionsService {

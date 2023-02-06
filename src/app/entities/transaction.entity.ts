@@ -6,8 +6,8 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { User } from '../auth/user.entity';
-import { JournalEntry } from '../journal-entry/journal-entry.entity';
+import { User } from './user.entity';
+import { JournalEntry } from './journal-entry.entity';
 
 @Entity({ name: 'transaction' })
 export class TransactionEntity extends BaseEntity {
@@ -23,7 +23,7 @@ export class TransactionEntity extends BaseEntity {
   @Column()
   description: string;
 
-  @Column({nullable:true})
+  @Column({ nullable: true })
   status: string;
 
   @ManyToOne(() => User, (user) => user.transactions, { eager: true })

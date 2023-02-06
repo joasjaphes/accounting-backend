@@ -15,7 +15,7 @@ services:
     image: node:16
     container_name: accounting-backend
     working_dir: /app
-    command: bash -c "npm run start"
+    command: bash -c "npm run start:dev"
     ports:
       - "4300:3000"
     network_mode: 'host'

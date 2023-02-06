@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { UnauthorizedException } from '@nestjs/common';
-import { TransactionEntity } from '../transactions/transaction.entity';
+import { TransactionEntity } from './transaction.entity';
 
 @Entity()
 export class User extends BaseEntity {

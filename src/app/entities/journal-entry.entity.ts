@@ -6,7 +6,7 @@ import {
   OneToOne,
   PrimaryColumn,
 } from 'typeorm';
-import { TransactionEntity } from '../transactions/transaction.entity';
+import { TransactionEntity } from './transaction.entity';
 import { JournalAccount } from './journal-account.entity';
 
 @Entity()
@@ -16,7 +16,7 @@ export class JournalEntry extends BaseEntity {
   @OneToOne(
     () => TransactionEntity,
     (transaction) => transaction.journalEntry,
-    { eager: true }
+    { eager: true },
   )
   transaction: TransactionEntity;
   @OneToMany(() => JournalAccount, (account) => account.journalId, {
