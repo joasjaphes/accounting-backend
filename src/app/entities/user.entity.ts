@@ -9,6 +9,7 @@ import {
 import * as bcrypt from 'bcrypt';
 import { UnauthorizedException } from '@nestjs/common';
 import { TransactionEntity } from './transaction.entity';
+import { JournalEntry } from './journal-entry.entity';
 
 @Entity()
 export class User extends BaseEntity {
@@ -49,6 +50,11 @@ export class User extends BaseEntity {
     eager: false,
   })
   transactions: TransactionEntity[];
+
+  @OneToMany(() => JournalEntry, (entry) => entry.user, {
+    eager: false,
+  })
+  journalEntries: JournalEntry[];
 
   async validatePassword(password: string) {
     const hash = await bcrypt.hash(password, this.salt);

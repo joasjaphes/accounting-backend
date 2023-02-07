@@ -8,6 +8,8 @@ import {
 } from 'typeorm';
 import { User } from './user.entity';
 import { JournalEntry } from './journal-entry.entity';
+import { timingSafeEqual } from 'crypto';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 
 @Entity({ name: 'transaction' })
 export class TransactionEntity extends BaseEntity {
@@ -33,4 +35,16 @@ export class TransactionEntity extends BaseEntity {
     eager: false,
   })
   journalEntry;
+
+  static async getTransaction(uid: string) {
+    try {
+      const transaction = await this.findOne({ uid });
+      if (!transaction) {
+        throw new NotFoundException();
+      }
+      return transaction;
+    } catch (e) {
+      throw new BadRequestException();
+    }
+  }
 }
