@@ -7,10 +7,9 @@ export class JournalEntryRepository extends Repository<JournalEntry> {
     try {
       const ref = await this.findOne({ where: { uid: journalEntry.id } });
       if (ref) {
-        await this.update({ id: ref.id }, journalEntry);
-      } else {
-        await this.save(journalEntry);
+        return await this.update({ id: ref.id }, journalEntry);
       }
+      return await this.save(journalEntry);
     } catch (e) {}
   }
 }

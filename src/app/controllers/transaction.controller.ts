@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '../auth/auth.guard';
-import { GetUser } from '../auth/get-user.decorator';
+import { AuthGuard } from '../guards/auth.guard';
+import { GetUser } from '../decorators/get-user.decorator';
 import { User } from '../entities/user.entity';
 import { TransactionDto } from '../dtos/transaction.dto';
 import { TransactionsService } from '../services/transactions.service';

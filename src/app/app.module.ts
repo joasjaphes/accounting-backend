@@ -22,7 +22,10 @@ import { JournalEntryModule } from './modules/journal-entry.module';
       database: 'accounting',
       entities: [__dirname + '/../**/*.entity.{js,ts}'],
       synchronize: true,
-      migrations: [],
+      migrations: [__dirname + '/../migrations/*.{js,ts}'],
+      cli: {
+        migrationsDir: __dirname + '/../migrations',
+      },
     }),
   ],
   controllers: [AppController],

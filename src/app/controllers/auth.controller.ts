@@ -1,5 +1,5 @@
 import { Body, Controller, Post, Put, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '../auth/auth.guard';
+import { AuthGuard } from '../guards/auth.guard';
 import { AuthService } from '../services/auth.service';
 import { SignInDto } from '../dtos/signin.dto';
 import { SignupDto } from '../dtos/signup.dto';

@@ -1,12 +1,19 @@
-import { BaseEntity, Column, Entity, ManyToOne, PrimaryColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Account } from './accounts.entity';
 import { JournalEntry } from './journal-entry.entity';
 
 @Entity()
 export class JournalAccount extends BaseEntity {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
   id: string;
-  @Column()
-  accountId: string;
+  @Column({ unique: true, length: 11 })
+  uid: string;
   @Column()
   debit: number;
   @Column()
@@ -15,4 +22,9 @@ export class JournalAccount extends BaseEntity {
     eager: false,
   })
   journalId;
+
+  @ManyToOne(() => Account, (account) => account.journaAccounts, {
+    eager: true,
+  })
+  account: Account;
 }

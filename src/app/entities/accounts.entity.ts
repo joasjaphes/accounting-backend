@@ -1,4 +1,11 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { JournalAccount } from './journal-account.entity';
 
 @Entity({ name: 'account' })
 export class Account extends BaseEntity {
@@ -22,4 +29,9 @@ export class Account extends BaseEntity {
 
   @Column()
   description: string;
+
+  @OneToMany(() => JournalAccount, (journalAccount) => journalAccount.account, {
+    eager: false,
+  })
+  journaAccounts: JournalAccount[];
 }

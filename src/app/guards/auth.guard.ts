@@ -3,9 +3,7 @@ import { User } from '../entities/user.entity';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  async canActivate(
-    context: ExecutionContext,
-  ):Promise<boolean> {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     const authorization: string = request.headers.authorization;
     const token = authorization.replace('Bearer ', '');
