@@ -1,50 +1,77 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { atob } from 'buffer';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { SignInDto } from '../dtos/signin.dto';
 import { SignupDto } from '../dtos/signup.dto';
 import { UserDto } from '../dtos/user.dto';
 import { User } from '../entities/user.entity';
-import { UserRepository } from '../repository/user.repository';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private userRepository: UserRepository,
-    private jwtService: JwtService,
+    @InjectRepository(User) private userRepository: Repository<User>,
   ) {}
   async signUp(signupDto: SignupDto): Promise<User> {
-    return await this.userRepository.signUp(signupDto);
+    const { id, firstName, surname, lastName, password, username } = signupDto;
+    const user = new User();
+    user.uid = id;
+    user.firstName = firstName;
+    user.surname = surname;
+    user.lastname = lastName;
+    user.username = username;
+    user.phoneNumber = signupDto.phoneNumber;
+    user.email = signupDto.email;
+    const salt = await bcrypt.genSalt();
+    user.password = await this.hashPassword(password, salt);
+    user.salt = salt;
+    await user.save();
+    console.log('user', user);
+    delete user.password;
+    delete user.salt;
+    return user;
   }
 
   async updateUser(userDto: UserDto) {
-    return await this.userRepository.updateUser(userDto);
+    try {
+      const user = await this.userRepository.findOne({ uid: userDto.id });
+      user.firstName = userDto.firstName;
+      user.surname = userDto.surname;
+      user.lastname = userDto.lastName;
+      user.email = userDto.email;
+      user.phoneNumber = userDto.phoneNumber;
+      user.profilePhoto = userDto.profilePhoto;
+      await user.save();
+      return userDto;
+    } catch (e) {
+      throw new Error();
+    }
   }
 
   async signIn(signInDto: SignInDto) {
     const { username, password } = signInDto;
-    const refUser = await this.userRepository.findOne({ username });
-    if (refUser === null || refUser === undefined) {
-      throw new UnauthorizedException('Wrong username');
-    } else if (!(await refUser.validatePassword(password))) {
-      throw new UnauthorizedException('Wrong password');
-    } else {
-      // const payload = {username};
-      // const accesstoken = await this.jwtService.sign(payload);
-      const buff = Buffer.from(`${username}:${password}`, 'binary');
-      const token = buff.toString('base64');
-      delete refUser.password;
-      delete refUser.salt;
-      return { ...this.sanitizeUser(refUser), token };
-    }
-  }
+    try {
+      const refUser = await this.userRepository.findOne({ username });
 
-  async authenticateUser(username: string, password: string) {
-    const user = await this.userRepository.findOne({ username });
-    if (user) {
-      return await user.validatePassword(password);
-    } else {
-      return false;
+      if (refUser === null || refUser === undefined) {
+        throw new UnauthorizedException('Wrong username');
+      } else if (!(await refUser.validatePassword(password))) {
+        throw new UnauthorizedException('Wrong password');
+      } else {
+        const buff = Buffer.from(`${username}:${password}`, 'binary');
+        const token = buff.toString('base64');
+        delete refUser.password;
+        delete refUser.salt;
+        return { ...this.sanitizeUser(refUser), token };
+      }
+    } catch (e) {
+      console.log('Failed to signin', e);
+      throw new BadRequestException(e);
     }
   }
 
@@ -58,5 +85,9 @@ export class AuthService {
       phoneNumber: userPayload.phoneNumber,
       profilePhoto: userPayload.profilePhoto,
     };
+  }
+
+  async hashPassword(password: string, salt: string): Promise<string> {
+    return await bcrypt.hash(password, salt);
   }
 }

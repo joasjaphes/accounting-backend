@@ -2,11 +2,15 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { User } from '../entities/user.entity';
 import { TransactionDto } from '../dtos/transaction.dto';
 import { TransactionEntity } from '../entities/transaction.entity';
-import { TransactionRepository } from '../repository/transaction.repository';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class TransactionsService {
-  constructor(private transactionRepository: TransactionRepository) {}
+  constructor(
+    @InjectRepository(TransactionEntity)
+    private transactionRepository: Repository<TransactionEntity>,
+  ) {}
 
   async createTransaction(transactionPayload: TransactionDto, user: User) {
     try {
@@ -19,7 +23,6 @@ export class TransactionsService {
       const ref = await this.transactionRepository.findOne({
         where: { uid: transactionPayload.id },
       });
-      //   console.log('')
       if (ref) {
         await this.transactionRepository.update({ id: ref.id }, transaction);
       } else {
@@ -32,7 +35,7 @@ export class TransactionsService {
   }
 
   async getAllTransactions() {
-    const transactions = await this.transactionRepository.getAll();
+    const transactions = await this.transactionRepository.find();
     const transactionsToReturn = transactions.map((transaction) =>
       this.sanitizePayload(transaction),
     );

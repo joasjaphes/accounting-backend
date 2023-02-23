@@ -5,28 +5,41 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './modules/auth.module';
 import { TransactionsModule } from './modules/transactions.module';
 import { AccountsModule } from './modules/accounts.module';
-import { JournalEntryService } from './services/journal-entry/journal-entry.service';
+import { JournalEntryService } from './services/journal-entry.service';
 import { JournalEntryModule } from './modules/journal-entry.module';
+import { User } from './entities/user.entity';
+import { Account } from './entities/accounts.entity';
+import { JournalAccount } from './entities/journal-account.entity';
+import { JournalEntry } from './entities/journal-entry.entity';
+import { TransactionEntity } from './entities/transaction.entity';
 
 @Module({
   imports: [
-    AuthModule,
-    TransactionsModule,
-    AccountsModule,
-    JournalEntryModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
       username: 'postgres',
       password: 'postgres',
       database: 'accounting',
-      entities: [__dirname + '/../**/*.entity.{js,ts}'],
+      entities: [
+        User,
+        TransactionEntity,
+        Account,
+        JournalEntry,
+        JournalAccount,
+      ],
+      // entities: [__dirname + '/../**/**/*.entity.{js,ts}'],
       synchronize: true,
       migrations: [__dirname + '/../migrations/*.{js,ts}'],
       cli: {
         migrationsDir: __dirname + '/../migrations',
       },
     }),
+
+    AuthModule,
+    TransactionsModule,
+    AccountsModule,
+    JournalEntryModule,
   ],
   controllers: [AppController],
   providers: [AppService],
