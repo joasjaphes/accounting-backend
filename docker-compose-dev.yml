@@ -10,6 +10,8 @@ services:
       POSTGRES_PASSQORD: postgres
       POSTGRES_DB: accounting
       POSTGRES_HOST_AUTH_METHOD: trust
+    volumes:
+      - accounting-data:/var/lib/postgresql/data
 
   accounting-backend:
     image: node:16
@@ -23,3 +25,8 @@ services:
       - accounting-db
     volumes:
       - .:/app
+
+volumes:
+  accounting-data:
+    driver: local
+

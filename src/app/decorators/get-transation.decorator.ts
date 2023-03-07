@@ -3,7 +3,8 @@ import { TransactionEntity } from '../entities/transaction.entity';
 
 export const GetTransaction = createParamDecorator(
   async (data, req): Promise<TransactionEntity> => {
-    console.log('data', data);
-    return TransactionEntity.getTransaction(data);
+    const request = req?.args[0];
+    const journalEntry = request?.body;
+    return TransactionEntity.getTransaction(journalEntry?.transactionId);
   },
 );

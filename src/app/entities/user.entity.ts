@@ -11,7 +11,7 @@ import { UnauthorizedException } from '@nestjs/common';
 import { TransactionEntity } from './transaction.entity';
 import { JournalEntry } from './journal-entry.entity';
 
-@Entity()
+@Entity('users')
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;

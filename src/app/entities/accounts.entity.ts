@@ -15,8 +15,8 @@ export class Account extends BaseEntity {
   @Column()
   category: string;
 
-  @Column()
-  balance: number;
+  @Column({ type: 'bigint', nullable: true })
+  balance: string;
 
   @Column({ unique: true, length: 11 })
   uid: string;

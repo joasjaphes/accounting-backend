@@ -2,6 +2,7 @@ import {
   BaseEntity,
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -31,11 +32,6 @@ export class TransactionEntity extends BaseEntity {
   @ManyToOne(() => User, (user) => user.transactions, { eager: true })
   user: User;
 
-  @OneToOne(() => JournalEntry, (journal) => journal.transaction, {
-    eager: false,
-  })
-  journalEntry;
-
   static async getTransaction(uid: string) {
     try {
       const transaction = await this.findOne({ uid });
@@ -44,6 +40,7 @@ export class TransactionEntity extends BaseEntity {
       }
       return transaction;
     } catch (e) {
+      console.error('Failed to fetch transaction', e);
       throw new BadRequestException();
     }
   }

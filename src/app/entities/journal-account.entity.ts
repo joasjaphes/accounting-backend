@@ -12,17 +12,14 @@ import { JournalEntry } from './journal-entry.entity';
 export class JournalAccount extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: string;
-  @Column({ unique: true, length: 11 })
-  uid: string;
-  @Column()
-  debit: number;
-  @Column()
-  credit: number;
+  @Column({ type: 'bigint', nullable: true })
+  debit: string;
+  @Column({ type: 'bigint', nullable: true })
+  credit: string;
   @ManyToOne(() => JournalEntry, (journal) => journal.accounts, {
     eager: false,
   })
-  journalId;
-
+  journal: JournalEntry;
   @ManyToOne(() => Account, (account) => account.journaAccounts, {
     eager: true,
   })

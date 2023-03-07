@@ -2,6 +2,7 @@ import {
   BaseEntity,
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
   OneToOne,
@@ -18,19 +19,21 @@ export class JournalEntry extends BaseEntity {
   id: string;
   @Column({ unique: true, length: 11 })
   uid: string;
-  @OneToOne(
-    () => TransactionEntity,
-    (transaction) => transaction.journalEntry,
-    { eager: true },
-  )
+  @OneToOne(() => TransactionEntity, { eager: true })
+  @JoinColumn()
   transaction: TransactionEntity;
-  @OneToMany(() => JournalAccount, (account) => account.journalId, {
+
+  @OneToMany(() => JournalAccount, (account) => account.journal, {
     eager: true,
   })
   accounts: JournalAccount[];
 
   @ManyToOne(() => User, (user) => user.journalEntries, {
-    eager: true,
+    eager: false,
   })
   user: User;
+
+  static async getJournalEntry(uid) {
+    return await this.findOne({ uid });
+  }
 }

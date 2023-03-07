@@ -42,6 +42,14 @@ export class AccountsService {
     }
   }
 
+  async getAccountById(id: string) {
+    try {
+      return await this.accountRepository.findOne({ where: { uid: id } });
+    } catch (e) {
+      throw e;
+    }
+  }
+
   sanitizeAccount(account: Account): AccountDto {
     return {
       id: account.uid,

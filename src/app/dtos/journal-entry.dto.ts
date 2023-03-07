@@ -1,5 +1,7 @@
+import { JournalAccountDto } from './journal-account.dto';
+
 export class JournalEntryDto {
   id: string;
-  accounts: { id: string; credit: number; debit: number }[];
+  accounts: JournalAccountDto[];
   transactionId: string;
 }

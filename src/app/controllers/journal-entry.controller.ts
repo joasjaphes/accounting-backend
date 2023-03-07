@@ -17,10 +17,10 @@ export class JournalEntryController {
       await this.journalEntryService.saveJournalEntry(
         receivedTransaction,
         transaction,
-        [],
         user,
       );
     } catch (e) {
+      console.log('Error', e);
       throw e;
     }
   }

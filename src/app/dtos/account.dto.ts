@@ -1,7 +1,7 @@
 export interface AccountDto {
   id: string;
   category: string;
-  balance: number;
+  balance: string;
   name: string;
   description: string;
   status: string;
