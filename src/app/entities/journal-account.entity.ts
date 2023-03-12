@@ -16,12 +16,12 @@ export class JournalAccount extends BaseEntity {
   debit: string;
   @Column({ type: 'bigint', nullable: true })
   credit: string;
-  @ManyToOne(() => JournalEntry, (journal) => journal.accounts, {
-    eager: false,
-  })
-  journal: JournalEntry;
-  @ManyToOne(() => Account, (account) => account.journaAccounts, {
-    eager: true,
-  })
-  account: Account;
+  // @ManyToOne(() => JournalEntry, (journal) => journal.accounts, {
+  //   eager: false,
+  // })
+  // journal: JournalEntry;
+  // @ManyToOne(() => Account, (account) => account.journaAccounts, {
+  //   eager: true,
+  // })
+  // account: Account;
 }

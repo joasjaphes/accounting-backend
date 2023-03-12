@@ -12,6 +12,7 @@ import { Account } from './entities/accounts.entity';
 import { JournalAccount } from './entities/journal-account.entity';
 import { JournalEntry } from './entities/journal-entry.entity';
 import { TransactionEntity } from './entities/transaction.entity';
+import { AccountTransaction } from './entities/account-transaction.entity';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { TransactionEntity } from './entities/transaction.entity';
         Account,
         JournalEntry,
         JournalAccount,
+        AccountTransaction,
       ],
       // entities: [__dirname + '/../**/**/*.entity.{js,ts}'],
       synchronize: true,

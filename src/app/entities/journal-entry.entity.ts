@@ -12,6 +12,7 @@ import {
 import { TransactionEntity } from './transaction.entity';
 import { JournalAccount } from './journal-account.entity';
 import { User } from './user.entity';
+import { AccountTransaction } from './account-transaction.entity';
 
 @Entity()
 export class JournalEntry extends BaseEntity {
@@ -19,14 +20,21 @@ export class JournalEntry extends BaseEntity {
   id: string;
   @Column({ unique: true, length: 11 })
   uid: string;
-  @OneToOne(() => TransactionEntity, { eager: true })
+  @OneToOne(() => TransactionEntity, { eager: false })
   @JoinColumn()
   transaction: TransactionEntity;
 
-  @OneToMany(() => JournalAccount, (account) => account.journal, {
-    eager: true,
-  })
-  accounts: JournalAccount[];
+  @OneToMany(
+    () => AccountTransaction,
+    (accountTransaction) => accountTransaction.journalEntry,
+    { eager: true },
+  )
+  accountTransactions: AccountTransaction[];
+
+  // @OneToMany(() => JournalAccount, (account) => account.journal, {
+  //   eager: true,
+  // })
+  // accounts: JournalAccount[];
 
   @ManyToOne(() => User, (user) => user.journalEntries, {
     eager: false,

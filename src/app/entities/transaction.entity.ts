@@ -4,6 +4,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -11,6 +12,7 @@ import { User } from './user.entity';
 import { JournalEntry } from './journal-entry.entity';
 import { timingSafeEqual } from 'crypto';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { AccountTransaction } from './account-transaction.entity';
 
 @Entity({ name: 'transaction' })
 export class TransactionEntity extends BaseEntity {
@@ -31,6 +33,9 @@ export class TransactionEntity extends BaseEntity {
 
   @ManyToOne(() => User, (user) => user.transactions, { eager: true })
   user: User;
+
+  @OneToOne(() => JournalEntry, { eager: false })
+  journalEntry: JournalEntry;
 
   static async getTransaction(uid: string) {
     try {

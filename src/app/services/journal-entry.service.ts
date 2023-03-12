@@ -1,12 +1,15 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JournalEntryDto } from 'src/app/dtos/journal-entry.dto';
-import { JournalAccount } from 'src/app/entities/journal-account.entity';
 import { JournalEntry } from 'src/app/entities/journal-entry.entity';
 import { TransactionEntity } from 'src/app/entities/transaction.entity';
 import { User } from 'src/app/entities/user.entity';
 import { Repository } from 'typeorm';
 import { JournalAccountDto } from '../dtos/journal-account.dto';
+import {
+  AccountTransaction,
+  TransactionAction,
+} from '../entities/account-transaction.entity';
 import { AccountsService } from './accounts.service';
 
 @Injectable()
@@ -15,18 +18,16 @@ export class JournalEntryService {
     @InjectRepository(JournalEntry)
     private repository: Repository<JournalEntry>,
     private accountService: AccountsService,
-    @InjectRepository(JournalAccount)
-    private journalAccountRepository: Repository<JournalAccount>,
+    @InjectRepository(AccountTransaction)
+    private accountTransactionRepository: Repository<AccountTransaction>,
   ) {}
   async saveJournalEntry(
     journalEntry: JournalEntryDto,
     transaction: TransactionEntity,
     user: User,
   ) {
-    console.log('journal', journalEntry);
     try {
       const journal = new JournalEntry();
-      // journal.accounts = await this.savedJournalAccounts(journalEntry.accounts);
       journal.uid = journalEntry.id;
       journal.transaction = transaction;
       journal.user = user;
@@ -34,7 +35,6 @@ export class JournalEntryService {
         where: { uid: `${journalEntry.id}` },
       });
       if (ref) {
-        console.log('ref', ref);
         return await this.repository.update({ id: ref.id }, journal);
       } else {
         await this.repository.insert(journal);
@@ -45,13 +45,10 @@ export class JournalEntryService {
           journalEntry.accounts,
           savedJournal,
         );
-        await this.journalAccountRepository.insert(accounts);
+        await this.accountTransactionRepository.insert(accounts);
         await delete savedJournal?.id;
         return savedJournal;
       }
-      // console.log('Journal', journal);
-      // return 200;
-      // await journal;
     } catch (e) {
       console.log('Erorr', e);
       throw new BadRequestException();
@@ -62,31 +59,26 @@ export class JournalEntryService {
     accounts: JournalAccountDto[],
     journal: JournalEntry,
   ) {
-    const journalAccounts: JournalAccount[] = [];
-    console.log('accounts', accounts);
+    const accountTransactions: AccountTransaction[] = [];
     try {
       for (const account of accounts) {
-        const savedAccount = new JournalAccount();
-        savedAccount.credit = account.credit;
-        savedAccount.debit = account.debit;
+        const transaction = new AccountTransaction();
         const refAccount = await this.getAccount(account.id);
-        savedAccount.account = refAccount;
-        let newBalance = refAccount.balance
-          ? parseFloat(refAccount.balance)
-          : 0;
-        if (savedAccount.credit) {
-          newBalance -= parseFloat(savedAccount.credit);
+        transaction.account = refAccount;
+        transaction.journalEntry = journal;
+        if (account.credit) {
+          transaction.action = TransactionAction.CREDIT;
+          transaction.amount = account.credit;
+          transaction.account = refAccount;
+          transaction.journalEntry = journal;
         }
-        if (savedAccount.debit) {
-          newBalance += parseFloat(savedAccount.debit);
+        if (account.debit) {
+          transaction.action = TransactionAction.DEBIT;
+          transaction.amount = account.debit;
         }
-        refAccount.balance = newBalance.toFixed(0);
-        await refAccount.save();
-        savedAccount.journal = journal;
-        // await savedAccount.save();
-        journalAccounts.push(savedAccount);
+        accountTransactions.push(transaction);
       }
-      return journalAccounts;
+      return accountTransactions;
     } catch (e) {
       console.log('error');
       throw e;

@@ -5,6 +5,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { AccountTransaction } from './account-transaction.entity';
 import { JournalAccount } from './journal-account.entity';
 
 @Entity({ name: 'account' })
@@ -14,6 +15,9 @@ export class Account extends BaseEntity {
 
   @Column()
   category: string;
+
+  @Column({ nullable: true })
+  initialBalance: string;
 
   @Column({ type: 'bigint', nullable: true })
   balance: string;
@@ -30,8 +34,12 @@ export class Account extends BaseEntity {
   @Column()
   description: string;
 
-  @OneToMany(() => JournalAccount, (journalAccount) => journalAccount.account, {
-    eager: false,
+  // @OneToMany(() => JournalAccount, (journalAccount) => journalAccount.account, {
+  //   eager: false,
+  // })
+  // journaAccounts: JournalAccount[];
+  @OneToMany(() => AccountTransaction, (transaction) => transaction.account, {
+    eager: true,
   })
-  journaAccounts: JournalAccount[];
+  transactions: AccountTransaction[];
 }

@@ -15,6 +15,7 @@ export class AccountsService {
       const account = new Account();
       account.uid = accountPayload.id;
       account.balance = accountPayload.balance;
+      account.initialBalance = accountPayload.initialBalance;
       account.category = accountPayload.category;
       account.name = accountPayload.name;
       account.description = accountPayload.description;
@@ -53,7 +54,8 @@ export class AccountsService {
   sanitizeAccount(account: Account): AccountDto {
     return {
       id: account.uid,
-      balance: account.balance,
+      balance: account.balance ? account.balance : '0',
+      initialBalance: account.initialBalance ? account.initialBalance : '0',
       category: account.category,
       name: account.name,
       description: account.description,

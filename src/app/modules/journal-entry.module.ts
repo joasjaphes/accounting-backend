@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JournalEntryController } from '../controllers/journal-entry.controller';
+import { AccountTransaction } from '../entities/account-transaction.entity';
 import { JournalAccount } from '../entities/journal-account.entity';
 import { JournalEntry } from '../entities/journal-entry.entity';
 import { AccountsService } from '../services/accounts.service';
@@ -11,7 +12,11 @@ import { AccountsModule } from './accounts.module';
   controllers: [JournalEntryController],
   providers: [JournalEntryService],
   imports: [
-    TypeOrmModule.forFeature([JournalEntry, JournalAccount]),
+    TypeOrmModule.forFeature([
+      JournalEntry,
+      JournalAccount,
+      AccountTransaction,
+    ]),
     AccountsModule,
   ],
 })
