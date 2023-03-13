@@ -39,7 +39,7 @@ export class Account extends BaseEntity {
   // })
   // journaAccounts: JournalAccount[];
   @OneToMany(() => AccountTransaction, (transaction) => transaction.account, {
-    eager: true,
+    eager: false,
   })
   transactions: AccountTransaction[];
 }

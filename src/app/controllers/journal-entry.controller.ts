@@ -14,7 +14,7 @@ export class JournalEntryController {
   ) {
     try {
       const receivedTransaction = req.body;
-      await this.journalEntryService.saveJournalEntry(
+      return await this.journalEntryService.saveJournalEntry(
         receivedTransaction,
         transaction,
         user,

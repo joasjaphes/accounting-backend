@@ -17,7 +17,7 @@ export class AccountTransaction extends BaseEntity {
   action: string;
   @Column()
   amount: string;
-  @ManyToOne(() => Account, (account) => account.transactions, { eager: false })
+  @ManyToOne(() => Account, (account) => account.transactions, { eager: true })
   account: Account;
   @ManyToOne(() => JournalEntry, (journal) => journal.accountTransactions, {
     eager: false,

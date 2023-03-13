@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { AccountsService } from '../services/accounts.service';
 import { AccountDto } from '../dtos/account.dto';
 
@@ -14,5 +14,13 @@ export class AccountsController {
   @Get('')
   async getAccounts() {
     return await this.accountService.getAllAccounts();
+  }
+  @Get('transactions/:id')
+  async getAccountTransaction(@Param() params) {
+    try {
+      return await this.accountService.getAccountTransactions(params.id);
+    } catch (e) {
+      throw e;
+    }
   }
 }

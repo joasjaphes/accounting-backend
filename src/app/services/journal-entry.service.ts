@@ -35,7 +35,12 @@ export class JournalEntryService {
         where: { uid: `${journalEntry.id}` },
       });
       if (ref) {
-        return await this.repository.update({ id: ref.id }, journal);
+        console.log('ref', ref);
+        return await this.updateJournalEntry(
+          ref,
+          journal,
+          journalEntry.accounts,
+        );
       } else {
         await this.repository.insert(journal);
         const savedJournal = await this.repository.findOne({
@@ -55,6 +60,54 @@ export class JournalEntryService {
     }
   }
 
+  async prepareAccountTransaction(
+    journalAccount: JournalAccountDto,
+    journal: JournalEntry,
+  ) {
+    const transaction = new AccountTransaction();
+    const refAccount = await this.getAccount(journalAccount.id);
+    transaction.account = refAccount;
+    transaction.journalEntry = journal;
+    if (journalAccount.credit) {
+      transaction.action = TransactionAction.CREDIT;
+      transaction.amount = journalAccount.credit;
+    } else {
+      transaction.action = TransactionAction.DEBIT;
+      transaction.amount = journalAccount.debit;
+    }
+    return transaction;
+  }
+
+  async updateJournalEntry(
+    refJournal: JournalEntry,
+    newJournal: JournalEntry,
+    journalAccounts: JournalAccountDto[],
+  ) {
+    try {
+      await this.repository.update({ id: refJournal.id }, newJournal);
+      for (const account of journalAccounts) {
+        const transaction = await this.prepareAccountTransaction(
+          account,
+          refJournal,
+        );
+        const refTransaction = refJournal.accountTransactions.find(
+          (transaction) => transaction.account?.uid === account.id,
+        );
+        if (refTransaction) {
+          this.accountTransactionRepository.update(
+            { id: refTransaction.id },
+            transaction,
+          );
+        } else {
+          await transaction.save();
+        }
+      }
+      return newJournal;
+    } catch (e) {
+      throw e;
+    }
+  }
+
   async savedJournalAccounts(
     accounts: JournalAccountDto[],
     journal: JournalEntry,
@@ -62,20 +115,10 @@ export class JournalEntryService {
     const accountTransactions: AccountTransaction[] = [];
     try {
       for (const account of accounts) {
-        const transaction = new AccountTransaction();
-        const refAccount = await this.getAccount(account.id);
-        transaction.account = refAccount;
-        transaction.journalEntry = journal;
-        if (account.credit) {
-          transaction.action = TransactionAction.CREDIT;
-          transaction.amount = account.credit;
-          transaction.account = refAccount;
-          transaction.journalEntry = journal;
-        }
-        if (account.debit) {
-          transaction.action = TransactionAction.DEBIT;
-          transaction.amount = account.debit;
-        }
+        const transaction = await this.prepareAccountTransaction(
+          account,
+          journal,
+        );
         accountTransactions.push(transaction);
       }
       return accountTransactions;

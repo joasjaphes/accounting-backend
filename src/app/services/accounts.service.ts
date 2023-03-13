@@ -1,13 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { Account } from '../entities/accounts.entity';
 import { AccountDto } from '../dtos/account.dto';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { AccountTransaction } from '../entities/account-transaction.entity';
 
 @Injectable()
 export class AccountsService {
   constructor(
     @InjectRepository(Account) private accountRepository: Repository<Account>,
+    @InjectRepository(AccountTransaction)
+    private accountTransactionRepository: Repository<AccountTransaction>,
   ) {}
 
   async saveAccount(accountPayload: AccountDto) {
@@ -40,6 +43,22 @@ export class AccountsService {
       return accounts.map((account) => this.sanitizeAccount(account));
     } catch (e) {
       throw new Error();
+    }
+  }
+
+  async getAccountTransactions(id: string) {
+    try {
+      const account = await this.getAccountById(id);
+      const transactions = await this.accountTransactionRepository.find({
+        where: { account: account },
+      });
+      return transactions.map((transaction) => {
+        delete transaction.id;
+        delete transaction.account;
+        return transaction;
+      });
+    } catch (e) {
+      throw e;
     }
   }
 
