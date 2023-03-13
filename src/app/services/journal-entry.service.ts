@@ -11,6 +11,7 @@ import {
   TransactionAction,
 } from '../entities/account-transaction.entity';
 import { AccountsService } from './accounts.service';
+import { CommonService } from './common.service';
 
 @Injectable()
 export class JournalEntryService {
@@ -18,6 +19,7 @@ export class JournalEntryService {
     @InjectRepository(JournalEntry)
     private repository: Repository<JournalEntry>,
     private accountService: AccountsService,
+    private commonService: CommonService,
     @InjectRepository(AccountTransaction)
     private accountTransactionRepository: Repository<AccountTransaction>,
   ) {}
@@ -66,6 +68,7 @@ export class JournalEntryService {
   ) {
     const transaction = new AccountTransaction();
     const refAccount = await this.getAccount(journalAccount.id);
+    transaction.uid = this.commonService.makeId();
     transaction.account = refAccount;
     transaction.journalEntry = journal;
     if (journalAccount.credit) {
@@ -91,9 +94,10 @@ export class JournalEntryService {
           refJournal,
         );
         const refTransaction = refJournal.accountTransactions.find(
-          (transaction) => transaction.account?.uid === account.id,
+          (transact) => transact.account?.uid === account.id,
         );
         if (refTransaction) {
+          transaction.uid = refTransaction.uid;
           this.accountTransactionRepository.update(
             { id: refTransaction.id },
             transaction,

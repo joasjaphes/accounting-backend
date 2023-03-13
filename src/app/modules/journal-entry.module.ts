@@ -5,12 +5,13 @@ import { AccountTransaction } from '../entities/account-transaction.entity';
 import { JournalAccount } from '../entities/journal-account.entity';
 import { JournalEntry } from '../entities/journal-entry.entity';
 import { AccountsService } from '../services/accounts.service';
+import { CommonService } from '../services/common.service';
 import { JournalEntryService } from '../services/journal-entry.service';
 import { AccountsModule } from './accounts.module';
 
 @Module({
   controllers: [JournalEntryController],
-  providers: [JournalEntryService],
+  providers: [JournalEntryService, CommonService],
   imports: [
     TypeOrmModule.forFeature([
       JournalEntry,

@@ -13,6 +13,8 @@ import { TransactionEntity } from './transaction.entity';
 export class AccountTransaction extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
+  @Column({ unique: true, nullable: false, length: 11 })
+  uid: string;
   @Column()
   action: string;
   @Column()
