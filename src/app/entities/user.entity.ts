@@ -66,7 +66,7 @@ export class User extends BaseEntity {
   }
 
   static async authenticateUser(username: string, password: string) {
-    const user = await this.findOne({ username });
+    const user = await this.findOneBy({ username });
     if (user) {
       return await user.validatePassword(password);
     } else {
@@ -75,7 +75,7 @@ export class User extends BaseEntity {
   }
 
   static async getUser(username: string) {
-    const user = await this.findOne({ username });
+    const user = await this.findOneBy({ username });
     if (user) {
       return user;
     } else {

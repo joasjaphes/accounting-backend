@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Account } from '../entities/accounts.entity';
 import { AccountDto } from '../dtos/account.dto';
-import { Repository } from 'typeorm';
+import { Equal, Like, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AccountTransaction } from '../entities/account-transaction.entity';
 
@@ -50,7 +50,7 @@ export class AccountsService {
     try {
       const account = await this.getAccountById(id);
       const transactions = await this.accountTransactionRepository.find({
-        where: { account: account },
+        where: { account: Equal(account) },
       });
       return transactions.map((transaction) => {
         delete transaction.id;

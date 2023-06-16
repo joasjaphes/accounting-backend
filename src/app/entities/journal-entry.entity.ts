@@ -42,6 +42,6 @@ export class JournalEntry extends BaseEntity {
   user: User;
 
   static async getJournalEntry(uid) {
-    return await this.findOne({ uid });
+    return await this.findOneBy({ uid });
   }
 }

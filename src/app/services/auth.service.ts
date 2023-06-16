@@ -39,7 +39,7 @@ export class AuthService {
 
   async updateUser(userDto: UserDto) {
     try {
-      const user = await this.userRepository.findOne({ uid: userDto.id });
+      const user = await this.userRepository.findOneBy({ uid: userDto.id });
       user.firstName = userDto.firstName;
       user.surname = userDto.surname;
       user.lastname = userDto.lastName;
@@ -56,7 +56,7 @@ export class AuthService {
   async signIn(signInDto: SignInDto) {
     const { username, password } = signInDto;
     try {
-      const refUser = await this.userRepository.findOne({ username });
+      const refUser = await this.userRepository.findOneBy({ username });
 
       if (refUser === null || refUser === undefined) {
         throw new UnauthorizedException('Wrong username');

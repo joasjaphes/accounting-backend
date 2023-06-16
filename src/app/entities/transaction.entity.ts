@@ -39,7 +39,7 @@ export class TransactionEntity extends BaseEntity {
 
   static async getTransaction(uid: string) {
     try {
-      const transaction = await this.findOne({ uid });
+      const transaction = await this.findOneBy({ uid });
       if (!transaction) {
         throw new NotFoundException();
       }

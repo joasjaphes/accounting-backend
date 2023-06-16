@@ -4,7 +4,6 @@ services:
   accounting-db:
     image: postgres:latest
     container_name: accounting-db
-    network_mode: 'host'
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSQORD: postgres
@@ -18,9 +17,10 @@ services:
     container_name: accounting-backend
     working_dir: /app
     command: bash -c "npm run start:dev"
+    environment:
+      - PORT=3000
     ports:
       - "4300:3000"
-    network_mode: 'host'
     depends_on:
       - accounting-db
     volumes:

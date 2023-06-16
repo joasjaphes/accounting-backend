@@ -18,7 +18,7 @@ import { AccountTransaction } from './entities/account-transaction.entity';
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
+      host: 'accounting-db',
       username: 'postgres',
       password: 'postgres',
       database: 'accounting',
@@ -33,9 +33,9 @@ import { AccountTransaction } from './entities/account-transaction.entity';
       // entities: [__dirname + '/../**/**/*.entity.{js,ts}'],
       synchronize: true,
       migrations: [__dirname + '/../migrations/*.{js,ts}'],
-      cli: {
-        migrationsDir: __dirname + '/../migrations',
-      },
+      // cli: {
+      //   migrationsDir: __dirname + '/../migrations',
+      // },
     }),
 
     AuthModule,
