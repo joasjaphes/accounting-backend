@@ -8,6 +8,7 @@ import {
 import { Account } from '../account/account.entity';
 import { Company } from '../company/company.entity';
 import { JournalEntry } from '../journal-entry/journal-entry.entity';
+import { TransactionType } from './transaction.dto';
 // import { TransactionType } from './transaction.dto';
 
 @Entity()
@@ -19,9 +20,7 @@ export class TransactionEntity extends BaseEntity {
   @Column()
   amount: number;
   @Column()
-  description: string;
-  @Column()
-  type: string;
+  type: TransactionType;
   @Column()
   date: string;
   @ManyToOne(() => Account, (account) => account.transactions)

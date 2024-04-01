@@ -13,7 +13,7 @@ export class JournalEntryService {
     @InjectRepository(JournalEntry)
     private repository: Repository<JournalEntry>,
     private accountService: AccountService,
-    private transactionService: TransactionService
+    private transactionService: TransactionService,
   ) {}
 
   async createJournalEntry(journal: JournalEntryDTO) {
@@ -30,7 +30,7 @@ export class JournalEntryService {
     try {
       const journals = await this.repository.find();
       return journals.map((journal) =>
-        this.getJournalEntryDTOFromPayload(journal)
+        this.getJournalEntryDTOFromPayload(journal),
       );
     } catch (e) {
       console.error('Failed to get journal entries', e);
@@ -42,6 +42,7 @@ export class JournalEntryService {
     const journalPayload = this.repository.create();
     journalPayload.uid = journal.id;
     journalPayload.date = journal.date;
+    journalPayload.description = journal.description;
     const transactions: TransactionEntity[] = [];
     for (const transaction of journal.transactions) {
       const transactionPayload =
@@ -56,8 +57,9 @@ export class JournalEntryService {
     return {
       id: journal.uid,
       date: journal.date,
+      description: journal.description,
       transactions: journal.transactions.map((transaction) =>
-        this.transactionService.getTransactionDTOFromPayload(transaction)
+        this.transactionService.getTransactionDTOFromPayload(transaction),
       ),
     };
   }

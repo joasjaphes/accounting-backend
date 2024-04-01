@@ -15,6 +15,8 @@ export class JournalEntry extends BaseEntity {
   uid: string;
   @Column()
   date: string;
+  @Column({ nullable: false })
+  description: string;
   @OneToMany(() => TransactionEntity, (transaction) => transaction.journal)
   transactions: TransactionEntity[];
 }

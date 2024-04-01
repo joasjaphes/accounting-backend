@@ -24,12 +24,14 @@ export class TransactionService {
   }
 
   async getTransactionPayloadFromDTO(
-    transaction: TransactionDTO
+    transaction: TransactionDTO,
   ): Promise<TransactionEntity> {
     const transactionPayload = this.repository.create();
     transactionPayload.uid = transaction.id;
     transactionPayload.amount = transaction.amount;
-    const account = await this.accountService.getAccountByUId(transaction.id);
+    const account = await this.accountService.getAccountByUId(
+      transaction.accountId,
+    );
     transactionPayload.account =
       await this.accountService.getAccountPayloadFromDTO(account);
     return transactionPayload;
@@ -38,11 +40,11 @@ export class TransactionService {
   getTransactionDTOFromPayload(transaction: TransactionEntity): TransactionDTO {
     return {
       id: transaction.uid,
-      description: transaction.description,
       date: transaction.date,
       amount: transaction.amount,
       journal: transaction.journal.uid,
       type: transaction.type,
+      accountId: transaction.account.uid,
       account: transaction.account,
     };
   }
