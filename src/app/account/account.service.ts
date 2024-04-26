@@ -9,16 +9,16 @@ import { CompanyService } from '../company/company.service';
 export class AccountService {
   constructor(
     @InjectRepository(Account) private repository: Repository<Account>,
-    private companyService: CompanyService
+    private companyService: CompanyService,
   ) {}
 
   async createAccount(account: AccountDTO): Promise<AccountDTO> {
     try {
       const accountPayload: Account = await this.getAccountPayloadFromDTO(
-        account
+        account,
       );
       const createdAccount: Account = await this.repository.save(
-        accountPayload
+        accountPayload,
       );
       return this.getAccountDTOFromPayload(createdAccount);
     } catch (e) {
@@ -30,11 +30,11 @@ export class AccountService {
   async updateAccount(account: AccountDTO): Promise<AccountDTO> {
     try {
       const accountPayload: Account = await this.getAccountPayloadFromDTO(
-        account
+        account,
       );
       const result = await this.repository.update(
         { uid: account.id },
-        accountPayload
+        accountPayload,
       );
       console.log(result);
       return account;
@@ -48,6 +48,18 @@ export class AccountService {
     try {
       const accounts: Account[] = await this.repository.find();
       return accounts.map((account) => this.getAccountDTOFromPayload(account));
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
+  }
+
+  async getOneAccount(uid: string): Promise<Account> {
+    try {
+      const account: Account = await this.repository.findOne({
+        where: { uid },
+      });
+      return account;
     } catch (e) {
       console.error(e);
       throw e;
@@ -79,7 +91,7 @@ export class AccountService {
   async getAccountPayloadFromDTO(account: AccountDTO): Promise<Account> {
     const company = await this.companyService.getCompanyByUId(account.company);
     const companyPayload = await this.companyService.getCompanyPayloadFromDTO(
-      company
+      company,
     );
     const newAccount: Account = this.repository.create();
     newAccount.uid = account.id;

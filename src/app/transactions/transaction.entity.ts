@@ -23,7 +23,7 @@ export class TransactionEntity extends BaseEntity {
   type: TransactionType;
   @Column()
   date: string;
-  @ManyToOne(() => Account, (account) => account.transactions)
+  @ManyToOne(() => Account, (account) => account.transactions, { eager: true })
   account: Account;
   @ManyToOne(() => Company, (company) => company.transactions)
   company: Company;

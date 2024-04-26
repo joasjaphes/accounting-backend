@@ -6,6 +6,7 @@ import { AccountService } from '../account/account.service';
 import { JournalEntryDTO } from './journal-entry.dto';
 import { TransactionService } from '../transactions/transaction.service';
 import { TransactionEntity } from '../transactions/transaction.entity';
+import { TransactionDTO } from '../transactions/transaction.dto';
 
 @Injectable()
 export class JournalEntryService {
@@ -17,11 +18,25 @@ export class JournalEntryService {
   ) {}
 
   async createJournalEntry(journal: JournalEntryDTO) {
+    console.log('Journal', journal);
     try {
+      await this.saveJournalTransactions(journal.transactions);
       const journalPayload = await this.getJournalPayloadFromDTO(journal);
-      return await journalPayload.save();
+      const entry = await journalPayload.save();
+      return entry;
     } catch (e) {
       console.error('Failed to save journal entry', e);
+      throw e;
+    }
+  }
+
+  async saveJournalTransactions(transactions: TransactionDTO[]) {
+    try {
+      for (const transaction of transactions) {
+        await this.transactionService.saveTransaction(transaction);
+      }
+    } catch (e) {
+      console.error('Failed to save transactions', e);
       throw e;
     }
   }
@@ -46,7 +61,7 @@ export class JournalEntryService {
     const transactions: TransactionEntity[] = [];
     for (const transaction of journal.transactions) {
       const transactionPayload =
-        await this.transactionService.getTransactionPayloadFromDTO(transaction);
+        await this.transactionService.getTransactionByUID(transaction.id);
       transactions.push(transactionPayload);
     }
     journalPayload.transactions = transactions;
