@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { entities } from 'src/database/entities';
 import { services } from 'src/database/services';
 import { controllers } from 'src/database/controllers';
+import { AuthGuard } from './guards/auth.guard';
 
 @Module({
   imports: [
@@ -22,7 +23,7 @@ import { controllers } from 'src/database/controllers';
     TypeOrmModule.forFeature([...entities]),
   ],
   controllers: [AppController, ...controllers],
-  providers: [AppService, ...services],
+  providers: [AppService, ...services, AuthGuard],
 })
 export class AppModule {
   constructor() {

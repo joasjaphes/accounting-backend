@@ -1,7 +1,9 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { JournalEntryService } from './journal-entry.service';
 import { JournalEntryDTO } from './journal-entry.dto';
+import { AuthGuard } from '../guards/auth.guard';
 
+@UseGuards(AuthGuard)
 @Controller('journalEntries')
 export class JournalEntryController {
   constructor(private journalService: JournalEntryService) {}

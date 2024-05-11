@@ -10,7 +10,7 @@ import { CompanyService } from '../company/company.service';
 export class UserService {
   constructor(
     @InjectRepository(User) private repository: Repository<User>,
-    private companyService: CompanyService
+    private companyService: CompanyService,
   ) {}
 
   async createUser(userObject: UserDTO): Promise<User> {
@@ -39,7 +39,7 @@ export class UserService {
     }
   }
 
-  async login(credentials: CredentialDTO): Promise<UserDTO> {
+  async authenticateUser(credentials: { username: string; password: string }) {
     try {
       const { username, password } = credentials;
       const user = await this.repository.findOne({
@@ -57,13 +57,22 @@ export class UserService {
         throw new UnauthorizedException('Wrong username provided');
       }
     } catch (e) {
+      console.error('Failed to get user', e);
+      throw e;
+    }
+  }
+
+  async login(credentials: CredentialDTO): Promise<UserDTO> {
+    try {
+      return await this.authenticateUser(credentials);
+    } catch (e) {
       Logger.error('Failed to login', e);
       throw e;
     }
   }
 
   async getHashedPassword(
-    password: string
+    password: string,
   ): Promise<{ password: string; salt: string }> {
     try {
       const salt = await bcrypt.genSalt();
@@ -81,7 +90,7 @@ export class UserService {
       const hashedPassword = await this.getHashedPassword(user.password);
       const company = await this.companyService.getCompanyByUId(user.companyId);
       const companyPayload = await this.companyService.getCompanyPayloadFromDTO(
-        company
+        company,
       );
       const userPayload: User = this.repository.create();
       userPayload.uid = user.id;
