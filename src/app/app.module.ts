@@ -7,6 +7,7 @@ import { entities } from 'src/database/entities';
 import { services } from 'src/database/services';
 import { controllers } from 'src/database/controllers';
 import { AuthGuard } from './guards/auth.guard';
+import { ProductService } from './product/product.service';
 
 @Module({
   imports: [
@@ -23,7 +24,7 @@ import { AuthGuard } from './guards/auth.guard';
     TypeOrmModule.forFeature([...entities]),
   ],
   controllers: [AppController, ...controllers],
-  providers: [AppService, ...services, AuthGuard],
+  providers: [AppService, ...services, AuthGuard, ProductService],
 })
 export class AppModule {
   constructor() {

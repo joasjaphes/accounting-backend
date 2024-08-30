@@ -21,7 +21,7 @@ export class UserController {
   async getUsers() {
     return await this.userService.getAllUsers();
   }
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthGuard)
   @Post()
   async createUser(@Body() user: UserDTO) {
     if (!isPasswordValid(user.password)) {
