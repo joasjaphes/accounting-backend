@@ -33,6 +33,7 @@ export class ProductService {
       name: product.name,
       description: product.description,
       type: product.type,
+      price: product.price,
     };
   }
 
@@ -42,6 +43,7 @@ export class ProductService {
     newProduct.name = product.name;
     newProduct.description = product.description;
     newProduct.type = product.type;
+    newProduct.price = product.price;
     return newProduct;
   }
 }
