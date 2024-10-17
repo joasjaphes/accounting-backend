@@ -20,7 +20,7 @@ export class AuthGuard implements CanActivate {
   async validateRequest(request: Request) {
     try {
       const authHeader: string = request.headers['authorization'];
-      const token = authHeader.split(' ');
+      const token = authHeader?.split(' ');
       console.log('token', token);
       const decodedToken = Buffer.from(token[1], 'base64').toString('utf8');
       const userCredentials = decodedToken.split(':');

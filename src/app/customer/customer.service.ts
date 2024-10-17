@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Customer } from './customer.entity';
 import { Repository } from 'typeorm';
@@ -19,9 +19,63 @@ export class CustomerService {
     }
   }
 
+  async updateCustomer(customerPayload: CustomerDTO) {
+    try {
+      const customer = await this.findCustomerByUID(customerPayload.id);
+      customer.name = customerPayload.name;
+      customer.address = customerPayload.address;
+      customer.phoneNumber = customerPayload.phoneNumber;
+      customer.email = customerPayload.email;
+      return await customer.save();
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  async deleteCustomer(uid: string) {
+    try {
+      const customer = await this.findCustomerByUID(uid);
+      customer.deleted = true;
+      await customer.save();
+      return {
+        message: `Customer with uid ${uid} was deleted successfully`,
+        status: 'SUCCESS',
+      };
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  async findCustomerByUID(uid: string): Promise<Customer> {
+    try {
+      const customer = await this.repository.findOne({
+        where: { uid, deleted: false },
+      });
+      if (customer) {
+        return customer;
+      } else {
+        throw new NotFoundException(`Customer with uid ${uid} does not exist.`);
+      }
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  async getCustomerByUID(uid: string) {
+    try {
+      const customer = await this.findCustomerByUID(uid);
+      return this.getCustomerDTO(customer);
+    } catch (e) {
+      throw e;
+    }
+  }
+
   async getAllCustomers() {
     try {
-      return await this.repository.find();
+      const customers = await this.repository.find({
+        where: { deleted: false },
+      });
+      return customers.map((customer) => this.getCustomerDTO(customer));
     } catch (e) {
       throw e;
     }
@@ -35,5 +89,15 @@ export class CustomerService {
     customer.email = customerDTO.email;
     customer.phoneNumber = customerDTO.phoneNumber;
     return customer;
+  }
+
+  getCustomerDTO(customer: Customer): CustomerDTO {
+    return {
+      id: customer.uid,
+      name: customer.name,
+      address: customer.address,
+      phoneNumber: customer.phoneNumber,
+      email: customer.email,
+    };
   }
 }

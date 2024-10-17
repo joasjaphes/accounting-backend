@@ -20,4 +20,6 @@ export class Customer extends BaseEntity {
   phoneNumber: string;
   @Column({ nullable: true })
   email: string;
+  @Column({ default: false })
+  deleted: boolean;
 }
