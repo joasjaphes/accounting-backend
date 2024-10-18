@@ -2,9 +2,11 @@ import {
   BaseEntity,
   Column,
   Entity,
+  OneToMany,
   PrimaryColumn,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Invoice } from '../invoice/invoice.entity';
 
 @Entity()
 export class Customer extends BaseEntity {
@@ -22,4 +24,6 @@ export class Customer extends BaseEntity {
   email: string;
   @Column({ default: false })
   deleted: boolean;
+  @OneToMany(() => Invoice, (invoice) => invoice.customer)
+  invoices: Invoice[];
 }

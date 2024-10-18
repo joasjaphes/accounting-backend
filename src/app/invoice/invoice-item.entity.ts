@@ -2,9 +2,13 @@ import {
   BaseEntity,
   Column,
   Entity,
+  ManyToOne,
+  OneToMany,
   PrimaryColumn,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Invoice } from './invoice.entity';
+import { Product } from '../product/product.entity';
 
 @Entity()
 export class InvoiceItem extends BaseEntity {
@@ -20,4 +24,10 @@ export class InvoiceItem extends BaseEntity {
   WHTAmount: number;
   @Column({ nullable: false })
   subtotal: number;
+  @ManyToOne(() => Invoice, (invoice) => invoice.items)
+  invoice: Invoice;
+  @ManyToOne(() => Product, (product) => product.invoiceItems, { eager: true })
+  product: Product;
+  @Column({ nullable: false, default: 1 })
+  quantity: number;
 }

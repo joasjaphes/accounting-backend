@@ -1,10 +1,18 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryColumn,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { InvoiceItem } from '../invoice/invoice-item.entity';
 
 @Entity()
 export class Product extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
-  @Column({ unique: true, length: 11, nullable: false })
+  @PrimaryColumn({ unique: true, length: 11, nullable: false })
   uid: string;
   @Column({ unique: true, nullable: false })
   name: string;
@@ -14,4 +22,6 @@ export class Product extends BaseEntity {
   type: string;
   @Column({ nullable: true })
   price: number;
+  @OneToMany(() => InvoiceItem, (item) => item.product)
+  invoiceItems: InvoiceItem[];
 }

@@ -27,6 +27,14 @@ export class ProductService {
       throw e;
     }
   }
+
+  async findProductByUid(uid: string): Promise<Product> {
+    try {
+      return await this.repository.findOne({ where: { uid } });
+    } catch (e) {
+      throw e;
+    }
+  }
   getProductDTOFromEntity(product: Product): ProductDTO {
     return {
       id: product.uid,
