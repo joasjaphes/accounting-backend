@@ -29,6 +29,8 @@ export class Invoice extends BaseEntity {
   @Column({ nullable: false, default: 'UNPAID' })
   paymentStatus: string;
   @Column({ nullable: false })
+  invoiceNumber: string;
+  @Column({ nullable: false })
   date: Date;
   @OneToMany(() => InvoiceItem, (item) => item.invoice, { eager: true })
   items: InvoiceItem[];

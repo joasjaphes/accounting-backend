@@ -18,14 +18,16 @@ export class InvoiceService {
     private customerService: CustomerService,
   ) {}
 
-  async createInvoice(invoicePaylad: InvoiceDTO) {
+  async createInvoice(invoicePayload: InvoiceDTO) {
     try {
-      const invoice = this.getInvoicePayloadFromDTO(invoicePaylad);
+      const invoice = this.getInvoicePayloadFromDTO(invoicePayload);
       invoice.customer = await this.customerService.findCustomerByUID(
-        invoicePaylad.customerId,
+        invoicePayload.customerId,
       );
-      const savedInvoice = await this.invoiceRepository.save([invoice]);
-      await this.saveInvoiceItems(invoicePaylad, invoice);
+      invoice.invoiceNumber = await this.getInvoiceNumber(invoicePayload);
+      const savedInvoice = await invoice.save();
+      // await this.invoiceRepository.save([invoice]);
+      await this.saveInvoiceItems(invoicePayload, invoice);
       return savedInvoice;
     } catch (e) {
       console.error('Failed saving invoice', e);
@@ -103,6 +105,7 @@ export class InvoiceService {
       customerId: invoice.customer.uid,
       customer: this.customerService.getCustomerDTO(invoice.customer),
       items: invoice.items.map((item) => this.getInvoiceItemDTO(item)),
+      invoiceNumber: invoice.invoiceNumber,
     };
   }
 
@@ -116,5 +119,15 @@ export class InvoiceService {
       VATAmount: invoiceItem.VATAmount,
       WHTAmount: invoiceItem.WHTAmount,
     };
+  }
+
+  async getInvoiceNumber(invoice: InvoiceDTO) {
+    try {
+      const year = new Date(invoice.date).getFullYear();
+      const invoiceNumber = await this.invoiceRepository.count();
+      return `INV/${year}/${invoiceNumber}`;
+    } catch (e) {
+      console.error('Failed to generate invoice number', e);
+    }
   }
 }

@@ -14,4 +14,5 @@ export interface InvoiceDTO {
   date: Date;
   customerId: string;
   customer?: CustomerDTO;
+  invoiceNumber: string;
 }
