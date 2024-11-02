@@ -7,6 +7,7 @@ import { ProductService } from '../product/product.service';
 import { InvoiceDTO } from './invoice.dto';
 import { InvoiceItemDTO } from './invoice-item.dto';
 import { CustomerService } from '../customer/customer.service';
+import moment from 'moment';
 
 @Injectable()
 export class InvoiceService {
@@ -19,6 +20,7 @@ export class InvoiceService {
   ) {}
 
   async createInvoice(invoicePayload: InvoiceDTO) {
+    // console.log('invoice payload', invoicePayload);
     try {
       const invoice = this.getInvoicePayloadFromDTO(invoicePayload);
       invoice.customer = await this.customerService.findCustomerByUID(
@@ -48,7 +50,7 @@ export class InvoiceService {
     const invoice = new Invoice();
     invoice.uid = invoiceDto.id;
     invoice.amount = invoiceDto.amount;
-    invoice.date = invoiceDto.date;
+    invoice.date = new Date(invoiceDto.date);
     invoice.description = invoiceDto.description;
     invoice.subtotal = invoiceDto.subtotal;
     invoice.paymentStatus = invoiceDto.paymentStatus;
