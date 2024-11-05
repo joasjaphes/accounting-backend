@@ -8,6 +8,7 @@ import {
 import { User } from '../user/user.entity';
 import { Account } from '../account/account.entity';
 import { TransactionEntity } from '../transactions/transaction.entity';
+import { Currency } from '../currency/currency.entity';
 
 @Entity()
 export class Company extends BaseEntity {
@@ -45,4 +46,6 @@ export class Company extends BaseEntity {
   accounts: Account[];
   @OneToMany(() => TransactionEntity, (transaction) => transaction.company)
   transactions: TransactionEntity[];
+  @OneToMany(() => Currency, (currency) => currency.companyId)
+  currencies: Currency[];
 }
