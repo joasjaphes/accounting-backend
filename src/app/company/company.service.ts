@@ -9,16 +9,16 @@ import { Repository } from 'typeorm';
 @Injectable()
 export class CompanyService {
   constructor(
-    @InjectRepository(Company) private repository: Repository<Company>
+    @InjectRepository(Company) private repository: Repository<Company>,
   ) {}
 
   async createCompany(company: CompanyDTO): Promise<CompanyDTO> {
     try {
       const companyPayload: Company = await this.getCompanyPayloadFromDTO(
-        company
+        company,
       );
       const createdCompany: Company = await this.repository.save(
-        companyPayload
+        companyPayload,
       );
       Logger.log('Company Created: ' + JSON.stringify(createdCompany));
       return this.getCompanyDTOFromPayload(createdCompany);
@@ -32,11 +32,12 @@ export class CompanyService {
   async updateCompany(company: CompanyDTO): Promise<CompanyDTO> {
     try {
       const companyPayload: Company = await this.getCompanyPayloadFromDTO(
-        company
+        company,
       );
+      console.log('UPDATING', company);
       const result = await this.repository.update(
         { uid: company.id },
-        companyPayload
+        companyPayload,
       );
       console.log(result);
       return company;
@@ -77,6 +78,15 @@ export class CompanyService {
     companyPayload.description = company.description ?? '';
     companyPayload.uid = company.id;
     companyPayload.address = company.address ?? '';
+    companyPayload.phoneNumber = company.phoneNumber ?? '';
+    companyPayload.email = company.email ?? '';
+    companyPayload.website = company.website ?? '';
+    companyPayload.TIN = company.TIN ?? '';
+    companyPayload.VRN = company.VRN ?? '';
+    companyPayload.costUpdateMethod = company.costUpdateMethod ?? '';
+    companyPayload.forceAccounting = company.forceAccounting ?? false;
+    companyPayload.logo = company.logo ?? '';
+    companyPayload.efdSettings = company.efdSettings ?? '';
     return companyPayload;
   }
 
@@ -85,6 +95,15 @@ export class CompanyService {
       id: company.uid,
       name: company.name,
       description: company.description,
+      address: company.address,
+      phoneNumber: company.phoneNumber,
+      email: company.email,
+      TIN: company.TIN,
+      VRN: company.VRN,
+      costUpdateMethod: company.costUpdateMethod,
+      forceAccounting: company.forceAccounting,
+      logo: company.logo,
+      efdSettings: company.efdSettings,
     };
     return companyDTO;
   }
