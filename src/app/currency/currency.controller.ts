@@ -9,7 +9,7 @@ export class CurrencyController {
   @Post()
   async createCurrency(@Body() currency: CurrencyDTO) {
     try {
-      return await this.currencyService.createCurrency(currency);
+      return await this.currencyService.saveCurrency(currency);
     } catch (e) {
       console.error('Failed to create currency', e);
       throw e;
@@ -19,7 +19,7 @@ export class CurrencyController {
   @Put()
   async updateCurrency(@Body() currency: CurrencyDTO) {
     try {
-      return await this.currencyService.updateCurrency(currency);
+      return await this.currencyService.saveCurrency(currency);
     } catch (e) {
       console.error('Failed to update currency', e);
       throw e;

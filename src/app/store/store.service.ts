@@ -26,19 +26,20 @@ export class StoreService {
     }
   }
 
-  async updateStore(storeDTO: StoreDTO) {
+  async saveStore(storeDTO: StoreDTO) {
     try {
       const refStore = await this.findStoreByUid(storeDTO.id);
       if (!refStore) {
-        throw new NotFoundException();
+        await this.createStore(storeDTO);
+      } else {
+        refStore.name = storeDTO.name;
+        refStore.description = storeDTO.description;
+        refStore.canRequestFromOtherStores = storeDTO.canRequestFromOtherStores;
+        refStore.allowSales = storeDTO.allowSales;
+        refStore.canIssueToOtherStores = storeDTO.canIssueToOtherStores;
+        refStore.canReceivePurchaseOrder = storeDTO.canReceivePurchaseOrder;
+        return await refStore.save();
       }
-      refStore.name = storeDTO.name;
-      refStore.description = storeDTO.description;
-      refStore.canRequestFromOtherStores = storeDTO.canRequestFromOtherStores;
-      refStore.allowSales = storeDTO.allowSales;
-      refStore.canIssueToOtherStores = storeDTO.canIssueToOtherStores;
-      refStore.canReceivePurchaseOrder = storeDTO.canReceivePurchaseOrder;
-      return await refStore.save();
     } catch (e) {
       console.error('Failed to update store', e);
       throw e;

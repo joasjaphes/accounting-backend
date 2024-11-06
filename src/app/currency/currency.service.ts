@@ -26,18 +26,19 @@ export class CurrencyService {
     }
   }
 
-  async updateCurrency(currencyDTO: CurrencyDTO) {
+  async saveCurrency(currencyDTO: CurrencyDTO) {
     try {
       const refCurrency = await this.findCurrencyByUid(currencyDTO.id);
       if (!refCurrency) {
-        throw new NotFoundException();
+        await this.createCurrency(currencyDTO);
+      } else {
+        refCurrency.name = currencyDTO.name;
+        refCurrency.description = currencyDTO.description;
+        refCurrency.exchangeRate = currencyDTO.exchangeRate;
+        refCurrency.isDefaultLocalCurrency = currencyDTO.isDefaultLocalCurrency;
+        refCurrency.symbol = currencyDTO.symbol;
+        return await refCurrency.save();
       }
-      refCurrency.name = currencyDTO.name;
-      refCurrency.description = currencyDTO.description;
-      refCurrency.exchangeRate = currencyDTO.exchangeRate;
-      refCurrency.isDefaultLocalCurrency = currencyDTO.isDefaultLocalCurrency;
-      refCurrency.symbol = currencyDTO.symbol;
-      return await refCurrency.save();
     } catch (e) {
       console.error('Failed to update currency', e);
       throw e;

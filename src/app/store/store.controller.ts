@@ -9,7 +9,7 @@ export class StoreController {
   @Post()
   async createStore(@Body() store: StoreDTO) {
     try {
-      return await this.storeService.createStore(store);
+      return await this.storeService.saveStore(store);
     } catch (e) {
       console.error('Failed to create store', e);
       throw e;
@@ -19,7 +19,7 @@ export class StoreController {
   @Put()
   async updateStore(@Body() store: StoreDTO) {
     try {
-      return await this.storeService.updateStore(store);
+      return await this.storeService.saveStore(store);
     } catch (e) {
       console.error('Failed to update store', e);
       throw e;
