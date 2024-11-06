@@ -3,16 +3,22 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Currency } from './currency.entity';
 import { Repository } from 'typeorm';
 import { CurrencyDTO } from './currency.dto';
+import { CompanyService } from '../company/company.service';
 
 @Injectable()
 export class CurrencyService {
   constructor(
     @InjectRepository(Currency) private repository: Repository<Currency>,
+    private companyService: CompanyService,
   ) {}
 
   async createCurrency(currencyDTO: CurrencyDTO) {
     try {
       const currency = this.getCurrencyFromDTO(currencyDTO);
+      const company = await this.companyService.findCompanyByUid(
+        currencyDTO.companyId,
+      );
+      currency.company = company;
       return await currency.save();
     } catch (e) {
       console.error('Failed to save currency', e);
@@ -66,7 +72,6 @@ export class CurrencyService {
     currency.exchangeRate = currencyDto.exchangeRate;
     currency.isDefaultLocalCurrency = currencyDto.isDefaultLocalCurrency;
     currency.symbol = currencyDto.symbol;
-    currency.companyId = currencyDto.companyId;
     return currency;
   }
 
@@ -78,7 +83,6 @@ export class CurrencyService {
       exchangeRate: currency.exchangeRate,
       isDefaultLocalCurrency: currency.isDefaultLocalCurrency,
       symbol: currency.symbol,
-      companyId: currency.companyId,
     };
   }
 }

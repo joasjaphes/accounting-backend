@@ -46,6 +46,6 @@ export class Company extends BaseEntity {
   accounts: Account[];
   @OneToMany(() => TransactionEntity, (transaction) => transaction.company)
   transactions: TransactionEntity[];
-  @OneToMany(() => Currency, (currency) => currency.companyId)
+  @OneToMany(() => Currency, (currency) => currency.company)
   currencies: Currency[];
 }

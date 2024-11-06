@@ -27,5 +27,5 @@ export class Store extends BaseEntity {
   @Column()
   canReceivePurchaseOrder?: boolean;
   @ManyToOne(() => Company, (company) => company.currencies)
-  companyId: string;
+  company: Company;
 }

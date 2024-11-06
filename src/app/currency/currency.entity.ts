@@ -20,10 +20,10 @@ export class Currency extends BaseEntity {
   description: string;
   @Column()
   symbol: string;
-  @Column()
+  @Column({ nullable: true })
   exchangeRate: number;
-  @Column()
+  @Column({ default: false })
   isDefaultLocalCurrency?: boolean;
   @ManyToOne(() => Company, (company) => company.currencies)
-  companyId: string;
+  company: Company;
 }

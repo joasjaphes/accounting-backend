@@ -47,11 +47,20 @@ export class CompanyService {
     }
   }
 
-  async getCompanyByUId(uid: string): Promise<CompanyDTO> {
+  async findCompanyByUid(uid) {
     try {
       const company: Company = await this.repository.findOne({
         where: { uid },
       });
+      return company;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  async getCompanyByUId(uid: string): Promise<CompanyDTO> {
+    try {
+      const company: Company = await this.findCompanyByUid(uid);
       return this.getCompanyDTOFromPayload(company);
     } catch (e) {
       console.error(e);

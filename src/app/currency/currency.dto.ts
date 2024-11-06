@@ -5,5 +5,5 @@ export interface CurrencyDTO {
   symbol: string;
   exchangeRate?: number;
   isDefaultLocalCurrency?: boolean;
-  companyId: string;
+  companyId?: string;
 }

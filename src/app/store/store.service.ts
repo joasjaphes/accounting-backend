@@ -3,14 +3,22 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Store } from './store.entity';
 import { Repository } from 'typeorm';
 import { StoreDTO } from './store.dto';
+import { CompanyService } from '../company/company.service';
 
 @Injectable()
 export class StoreService {
-  constructor(@InjectRepository(Store) private repository: Repository<Store>) {}
+  constructor(
+    @InjectRepository(Store) private repository: Repository<Store>,
+    private companyService: CompanyService,
+  ) {}
 
   async createStore(storeDTO: StoreDTO) {
     try {
       const store = this.getStoreFromDTO(storeDTO);
+      const company = await this.companyService.findCompanyByUid(
+        storeDTO.companyId,
+      );
+      store.company = company;
       return await store.save();
     } catch (e) {
       console.error('Failed to save store', e);
@@ -30,7 +38,6 @@ export class StoreService {
       refStore.allowSales = storeDTO.allowSales;
       refStore.canIssueToOtherStores = storeDTO.canIssueToOtherStores;
       refStore.canReceivePurchaseOrder = storeDTO.canReceivePurchaseOrder;
-      refStore.companyId = storeDTO.companyId;
       return await refStore.save();
     } catch (e) {
       console.error('Failed to update store', e);
@@ -65,7 +72,6 @@ export class StoreService {
     store.allowSales = storeDTO.allowSales;
     store.canIssueToOtherStores = storeDTO.canIssueToOtherStores;
     store.canReceivePurchaseOrder = storeDTO.canReceivePurchaseOrder;
-    store.companyId = storeDTO.companyId;
     return store;
   }
 
@@ -78,7 +84,6 @@ export class StoreService {
       allowSales: store.allowSales,
       canIssueToOtherStores: store.canIssueToOtherStores,
       canReceivePurchaseOrder: store.canReceivePurchaseOrder,
-      companyId: store.companyId,
     };
   }
 }
