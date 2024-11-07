@@ -8,6 +8,7 @@ import { JournalEntry } from 'src/app/journal-entry/journal-entry.entity';
 import { PaymentType } from 'src/app/payment-type/payment-type.entity';
 import { Product } from 'src/app/product/product.entity';
 import { Store } from 'src/app/store/store.entity';
+import { TaxCode } from 'src/app/tax-code/tax-code.entity';
 import { TransactionEntity } from 'src/app/transactions/transaction.entity';
 import { User } from 'src/app/user/user.entity';
 
@@ -24,4 +25,5 @@ export const entities = [
   Currency,
   Store,
   PaymentType,
+  TaxCode,
 ];

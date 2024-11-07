@@ -14,12 +14,12 @@ export class PaymentTypeService {
 
   async createPaymentType(paymentTypeDTO: PaymentTypeDTO) {
     try {
-      const store = this.getPaymentTypeFromDTO(paymentTypeDTO);
+      const paymentType = this.getPaymentTypeFromDTO(paymentTypeDTO);
       const company = await this.companyService.findCompanyByUid(
         paymentTypeDTO.companyId,
       );
-      store.company = company;
-      return await store.save();
+      paymentType.company = company;
+      return await paymentType.save();
     } catch (e) {
       console.error('Failed to save payment type', e);
       throw e;

@@ -7,6 +7,7 @@ import { JournalEntryController } from 'src/app/journal-entry/journal-entry.cont
 import { PaymentTypeController } from 'src/app/payment-type/payment-type.controller';
 import { ProductController } from 'src/app/product/product.controller';
 import { StoreController } from 'src/app/store/store.controller';
+import { TaxCodeController } from 'src/app/tax-code/tax-code.controller';
 import { UserController } from 'src/app/user/user.controller';
 
 export const controllers = [
@@ -20,4 +21,5 @@ export const controllers = [
   StoreController,
   CurrencyController,
   PaymentTypeController,
+  TaxCodeController,
 ];

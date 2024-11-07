@@ -6,6 +6,7 @@ import { InvoiceService } from 'src/app/invoice/invoice.service';
 import { JournalEntryService } from 'src/app/journal-entry/journal-entry.service';
 import { PaymentTypeService } from 'src/app/payment-type/payment-type.service';
 import { StoreService } from 'src/app/store/store.service';
+import { TaxCodeService } from 'src/app/tax-code/tax-code.service';
 import { TransactionService } from 'src/app/transactions/transaction.service';
 import { UserService } from 'src/app/user/user.service';
 
@@ -20,4 +21,5 @@ export const services = [
   StoreService,
   CurrencyService,
   PaymentTypeService,
+  TaxCodeService,
 ];
