@@ -9,7 +9,7 @@ import {
 import { Company } from '../company/company.entity';
 
 @Entity()
-export class Store extends BaseEntity {
+export class PaymentType extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
   @PrimaryColumn({ length: 11 })
@@ -19,13 +19,19 @@ export class Store extends BaseEntity {
   @Column()
   description: string;
   @Column()
-  canRequestFromOtherStores: boolean;
+  displayInSales: boolean;
   @Column()
-  allowSales: boolean;
+  displayInDebtorsPayments: boolean;
   @Column()
-  canIssueToOtherStores?: boolean;
+  displayInCreditPayments?: boolean;
   @Column()
-  canReceivePurchaseOrder?: boolean;
-  @ManyToOne(() => Company, (company) => company.stores)
+  displayInCustomerDeposits?: boolean;
+  @Column()
+  displayInRefunds?: boolean;
+  @Column()
+  displayInCashierReports?: boolean;
+  @Column()
+  displayInBankingReceivingMoney?: boolean;
+  @ManyToOne(() => Company, (company) => company.paymentTypes)
   company: Company;
 }
