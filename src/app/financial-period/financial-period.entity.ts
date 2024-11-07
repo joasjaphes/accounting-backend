@@ -9,7 +9,7 @@ import {
 import { Company } from '../company/company.entity';
 
 @Entity()
-export class TaxCode extends BaseEntity {
+export class FinancialPeriod extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
   @PrimaryColumn({ length: 11 })
@@ -19,15 +19,13 @@ export class TaxCode extends BaseEntity {
   @Column()
   description: string;
   @Column()
-  rate: number;
-  @Column({ nullable: true })
-  indicator: string;
-  @Column({ nullable: true })
-  EFDDepartmentCode: string;
+  startDate: Date;
   @Column()
-  salesAccount: string;
+  endDate: Date;
   @Column()
-  purchasesAccount: string;
-  @ManyToOne(() => Company, (company) => company.taxCodes)
+  costingMethod: string;
+  @Column()
+  status: string;
+  @ManyToOne(() => Company, (company) => company.financialPeriods)
   company: Company;
 }

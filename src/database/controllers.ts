@@ -2,6 +2,7 @@ import { AccountController } from 'src/app/account/account.controller';
 import { CompanyController } from 'src/app/company/company.controller';
 import { CurrencyController } from 'src/app/currency/currency.controller';
 import { CustomerController } from 'src/app/customer/customer.controller';
+import { FinancialPeriodController } from 'src/app/financial-period/financial-period.controller';
 import { InvoiceController } from 'src/app/invoice/invoice.controller';
 import { JournalEntryController } from 'src/app/journal-entry/journal-entry.controller';
 import { PaymentTypeController } from 'src/app/payment-type/payment-type.controller';
@@ -22,4 +23,5 @@ export const controllers = [
   CurrencyController,
   PaymentTypeController,
   TaxCodeController,
+  FinancialPeriodController,
 ];

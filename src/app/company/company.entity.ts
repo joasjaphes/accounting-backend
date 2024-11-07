@@ -11,6 +11,8 @@ import { TransactionEntity } from '../transactions/transaction.entity';
 import { Currency } from '../currency/currency.entity';
 import { Store } from '../store/store.entity';
 import { PaymentType } from '../payment-type/payment-type.entity';
+import { TaxCode } from '../tax-code/tax-code.entity';
+import { FinancialPeriod } from '../financial-period/financial-period.entity';
 
 @Entity()
 export class Company extends BaseEntity {
@@ -54,4 +56,11 @@ export class Company extends BaseEntity {
   stores: Store[];
   @OneToMany(() => PaymentType, (paymentType) => paymentType.company)
   paymentTypes: PaymentType[];
+  @OneToMany(() => TaxCode, (taxCode) => taxCode.company)
+  taxCodes: TaxCode[];
+  @OneToMany(
+    () => FinancialPeriod,
+    (financialPeriod) => financialPeriod.company,
+  )
+  financialPeriods: FinancialPeriod[];
 }

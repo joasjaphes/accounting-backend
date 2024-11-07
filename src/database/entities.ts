@@ -2,6 +2,7 @@ import { Account } from 'src/app/account/account.entity';
 import { Company } from 'src/app/company/company.entity';
 import { Currency } from 'src/app/currency/currency.entity';
 import { Customer } from 'src/app/customer/customer.entity';
+import { FinancialPeriod } from 'src/app/financial-period/financial-period.entity';
 import { InvoiceItem } from 'src/app/invoice/invoice-item.entity';
 import { Invoice } from 'src/app/invoice/invoice.entity';
 import { JournalEntry } from 'src/app/journal-entry/journal-entry.entity';
@@ -26,4 +27,5 @@ export const entities = [
   Store,
   PaymentType,
   TaxCode,
+  FinancialPeriod,
 ];
