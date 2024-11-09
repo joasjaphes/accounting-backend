@@ -39,7 +39,6 @@ export class TransactionService {
       const account = await this.accountService.getOneAccount(
         transaction.accountId,
       );
-      console.log('account', account);
       transactionPayload.account = account;
       return transactionPayload;
     } catch (e) {
@@ -49,7 +48,6 @@ export class TransactionService {
   }
 
   getTransactionDTOFromPayload(transaction: TransactionEntity): TransactionDTO {
-    console.log('transaction', transaction);
     return {
       id: transaction.uid,
       date: transaction.date,

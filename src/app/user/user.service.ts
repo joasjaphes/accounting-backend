@@ -45,7 +45,6 @@ export class UserService {
       const user = await this.repository.findOne({
         where: { username },
       });
-      console.log('User', user);
       if (user) {
         const passWordValid = await user.validatePassword(password);
         if (passWordValid) {
