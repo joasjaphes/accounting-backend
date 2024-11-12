@@ -7,6 +7,7 @@ import { InvoiceItem } from 'src/app/invoice/invoice-item.entity';
 import { Invoice } from 'src/app/invoice/invoice.entity';
 import { JournalEntry } from 'src/app/journal-entry/journal-entry.entity';
 import { PaymentType } from 'src/app/payment-type/payment-type.entity';
+import { ProductCategory } from 'src/app/product-category/product-category.entity';
 import { Product } from 'src/app/product/product.entity';
 import { Store } from 'src/app/store/store.entity';
 import { TaxCode } from 'src/app/tax-code/tax-code.entity';
@@ -28,4 +29,5 @@ export const entities = [
   PaymentType,
   TaxCode,
   FinancialPeriod,
+  ProductCategory,
 ];

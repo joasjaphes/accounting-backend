@@ -13,6 +13,7 @@ import { Store } from '../store/store.entity';
 import { PaymentType } from '../payment-type/payment-type.entity';
 import { TaxCode } from '../tax-code/tax-code.entity';
 import { FinancialPeriod } from '../financial-period/financial-period.entity';
+import { ProductCategory } from '../product-category/product-category.entity';
 
 @Entity()
 export class Company extends BaseEntity {
@@ -63,4 +64,9 @@ export class Company extends BaseEntity {
     (financialPeriod) => financialPeriod.company,
   )
   financialPeriods: FinancialPeriod[];
+  @OneToMany(
+    () => ProductCategory,
+    (productCategory) => productCategory.company,
+  )
+  productCategories: ProductCategory[];
 }

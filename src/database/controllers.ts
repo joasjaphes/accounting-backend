@@ -6,6 +6,7 @@ import { FinancialPeriodController } from 'src/app/financial-period/financial-pe
 import { InvoiceController } from 'src/app/invoice/invoice.controller';
 import { JournalEntryController } from 'src/app/journal-entry/journal-entry.controller';
 import { PaymentTypeController } from 'src/app/payment-type/payment-type.controller';
+import { ProductCategoryController } from 'src/app/product-category/prodyct-category.controller';
 import { ProductController } from 'src/app/product/product.controller';
 import { StoreController } from 'src/app/store/store.controller';
 import { TaxCodeController } from 'src/app/tax-code/tax-code.controller';
@@ -24,4 +25,5 @@ export const controllers = [
   PaymentTypeController,
   TaxCodeController,
   FinancialPeriodController,
+  ProductCategoryController,
 ];
