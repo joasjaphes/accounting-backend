@@ -1,4 +1,6 @@
 import { AccountService } from 'src/app/account/account.service';
+import { BinLocation } from 'src/app/bin-location/bin-location.entity';
+import { BinLocationService } from 'src/app/bin-location/bin-location.service';
 import { CompanyService } from 'src/app/company/company.service';
 import { CurrencyService } from 'src/app/currency/currency.service';
 import { CustomerService } from 'src/app/customer/customer.service';
@@ -28,4 +30,5 @@ export const services = [
   FinancialPeriodService,
   ProductCategoryService,
   PackagingService,
+  BinLocationService,
 ];

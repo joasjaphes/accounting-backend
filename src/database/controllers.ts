@@ -1,4 +1,5 @@
 import { AccountController } from 'src/app/account/account.controller';
+import { BinLocationController } from 'src/app/bin-location/bin-location.controller';
 import { CompanyController } from 'src/app/company/company.controller';
 import { CurrencyController } from 'src/app/currency/currency.controller';
 import { CustomerController } from 'src/app/customer/customer.controller';
@@ -28,4 +29,5 @@ export const controllers = [
   FinancialPeriodController,
   ProductCategoryController,
   PackagingController,
+  BinLocationController,
 ];

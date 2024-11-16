@@ -3,11 +3,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Packaging } from './packaging.entity';
 import { PackagingDTO } from './packaging.dto';
 import { CompanyService } from '../company/company.service';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class PackagingService {
   constructor(
-    @InjectRepository(Packaging) private repository,
+    @InjectRepository(Packaging) private repository: Repository<Packaging>,
     private companyService: CompanyService,
   ) {}
 
@@ -45,7 +46,7 @@ export class PackagingService {
 
   async getPackagingByUID(uid: string) {
     try {
-      return await this.repository.findOne({ uid });
+      return await this.repository.findOne({ where: { uid } });
     } catch (e) {
       console.error('Failed to get packaging by UID');
     }

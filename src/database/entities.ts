@@ -1,4 +1,5 @@
 import { Account } from 'src/app/account/account.entity';
+import { BinLocation } from 'src/app/bin-location/bin-location.entity';
 import { Company } from 'src/app/company/company.entity';
 import { Currency } from 'src/app/currency/currency.entity';
 import { Customer } from 'src/app/customer/customer.entity';
@@ -32,4 +33,5 @@ export const entities = [
   FinancialPeriod,
   ProductCategory,
   Packaging,
+  BinLocation,
 ];
