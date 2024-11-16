@@ -5,6 +5,7 @@ import { CustomerService } from 'src/app/customer/customer.service';
 import { FinancialPeriodService } from 'src/app/financial-period/financial-period.service';
 import { InvoiceService } from 'src/app/invoice/invoice.service';
 import { JournalEntryService } from 'src/app/journal-entry/journal-entry.service';
+import { PackagingService } from 'src/app/packaging/packaging.service';
 import { PaymentTypeService } from 'src/app/payment-type/payment-type.service';
 import { ProductCategoryService } from 'src/app/product-category/product-category.service';
 import { StoreService } from 'src/app/store/store.service';
@@ -26,4 +27,5 @@ export const services = [
   TaxCodeService,
   FinancialPeriodService,
   ProductCategoryService,
+  PackagingService,
 ];

@@ -14,6 +14,7 @@ import { PaymentType } from '../payment-type/payment-type.entity';
 import { TaxCode } from '../tax-code/tax-code.entity';
 import { FinancialPeriod } from '../financial-period/financial-period.entity';
 import { ProductCategory } from '../product-category/product-category.entity';
+import { Packaging } from '../packaging/packaging.entity';
 
 @Entity()
 export class Company extends BaseEntity {
@@ -69,4 +70,6 @@ export class Company extends BaseEntity {
     (productCategory) => productCategory.company,
   )
   productCategories: ProductCategory[];
+  @OneToMany(() => Packaging, (packaging) => packaging.company)
+  packagings: Packaging[];
 }
