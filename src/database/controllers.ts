@@ -8,6 +8,7 @@ import { InvoiceController } from 'src/app/invoice/invoice.controller';
 import { JournalEntryController } from 'src/app/journal-entry/journal-entry.controller';
 import { PackagingController } from 'src/app/packaging/packaging.controller';
 import { PaymentTypeController } from 'src/app/payment-type/payment-type.controller';
+import { PriceCategoryController } from 'src/app/price-category/price-category.controller';
 import { ProductCategoryController } from 'src/app/product-category/prodyct-category.controller';
 import { ProductController } from 'src/app/product/product.controller';
 import { StoreController } from 'src/app/store/store.controller';
@@ -30,4 +31,5 @@ export const controllers = [
   ProductCategoryController,
   PackagingController,
   BinLocationController,
+  PriceCategoryController,
 ];

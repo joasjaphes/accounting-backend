@@ -9,6 +9,7 @@ import { Invoice } from 'src/app/invoice/invoice.entity';
 import { JournalEntry } from 'src/app/journal-entry/journal-entry.entity';
 import { Packaging } from 'src/app/packaging/packaging.entity';
 import { PaymentType } from 'src/app/payment-type/payment-type.entity';
+import { PriceCategory } from 'src/app/price-category/price-category.entity';
 import { ProductCategory } from 'src/app/product-category/product-category.entity';
 import { Product } from 'src/app/product/product.entity';
 import { Store } from 'src/app/store/store.entity';
@@ -34,4 +35,5 @@ export const entities = [
   ProductCategory,
   Packaging,
   BinLocation,
+  PriceCategory,
 ];
