@@ -16,7 +16,7 @@ export class ProductCategory extends BaseEntity {
   uid: string;
   @Column()
   name: string;
-  @Column()
+  @Column({ nullable: true })
   description: string;
   @Column()
   salesTax: string;

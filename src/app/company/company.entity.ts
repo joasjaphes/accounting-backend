@@ -26,7 +26,7 @@ export class Company extends BaseEntity {
   uid: string;
   @Column({ nullable: false })
   name: string;
-  @Column()
+  @Column({ nullable: true })
   description: string;
   @Column()
   address: string;

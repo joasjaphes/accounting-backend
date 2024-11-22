@@ -16,7 +16,7 @@ export class FinancialPeriod extends BaseEntity {
   uid: string;
   @Column()
   name: string;
-  @Column()
+  @Column({ nullable: true })
   description: string;
   @Column()
   startDate: Date;

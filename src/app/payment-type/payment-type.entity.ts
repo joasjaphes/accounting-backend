@@ -16,7 +16,7 @@ export class PaymentType extends BaseEntity {
   uid: string;
   @Column()
   name: string;
-  @Column()
+  @Column({ nullable: true })
   description: string;
   @Column()
   displayInSales: boolean;

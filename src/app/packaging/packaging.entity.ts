@@ -15,10 +15,10 @@ export class Packaging extends BaseEntity {
   uid: string;
   @Column()
   name: string;
-  @Column()
+  @Column({ nullable: true })
   description: string;
   @Column()
   pieces: number;
-  @ManyToOne(() => Company, (company) => company.packagings)
+  @ManyToOne(() => Company, (company) => company.packagings, { eager: true })
   company: Company;
 }

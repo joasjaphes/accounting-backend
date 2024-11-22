@@ -16,7 +16,7 @@ export class TaxCode extends BaseEntity {
   uid: string;
   @Column()
   name: string;
-  @Column()
+  @Column({ nullable: true })
   description: string;
   @Column()
   rate: number;

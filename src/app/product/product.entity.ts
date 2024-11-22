@@ -16,7 +16,7 @@ export class Product extends BaseEntity {
   uid: string;
   @Column({ unique: true, nullable: false })
   name: string;
-  @Column()
+  @Column({ nullable: true })
   description: string;
   @Column()
   type: string;

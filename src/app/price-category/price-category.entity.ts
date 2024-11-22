@@ -15,7 +15,7 @@ export class PriceCategory extends BaseEntity {
   uid: string;
   @Column()
   name: string;
-  @Column()
+  @Column({ nullable: true })
   description: string;
   @Column()
   profitMargin: number;

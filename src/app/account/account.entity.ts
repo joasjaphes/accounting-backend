@@ -17,7 +17,7 @@ export class Account extends BaseEntity {
   uid: string;
   @Column({ nullable: false, unique: true })
   name: string;
-  @Column()
+  @Column({ nullable: true })
   description: string;
   @Column({ nullable: false })
   category: string;
