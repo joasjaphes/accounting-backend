@@ -1,0 +1,33 @@
+version: '3.3'
+
+services:
+  accounting-database:
+    image: postgres:9.6
+    container_name: accounting-database
+    # restart: always
+    environment:
+      POSTGRES_PASSWORD: accounting
+      POSTGRES_USER: accounting
+      POSTGRES_DB: accounting
+    network_mode: host
+    volumes:
+      - accounting-database:/var/lib/postgresql/data
+
+  accounting-api:
+    image: node:latest
+    container_name: accounting-api
+    working_dir: /app
+    command:
+      - sh
+      - -c
+      - "npm install && npm run start:dev"
+    volumes:
+      - ./:/app
+    # restart: always
+    network_mode: host
+    # ports:
+    #   - 3000:3000
+    depends_on:
+      - accounting-database
+volumes:
+  accounting-database:

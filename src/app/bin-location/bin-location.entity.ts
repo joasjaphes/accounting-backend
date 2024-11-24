@@ -17,6 +17,6 @@ export class BinLocation extends BaseEntity {
   name: string;
   @Column({ nullable: true })
   description: string;
-  @ManyToOne(() => Company, (company) => company.binLocations)
+  @ManyToOne(() => Company, (company) => company.binLocations, { eager: true })
   company: Company;
 }

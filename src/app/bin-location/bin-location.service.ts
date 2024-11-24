@@ -4,11 +4,13 @@ import { BinLocation } from './bin-location.entity';
 import { Repository } from 'typeorm';
 import { BinLocationDTO } from './bin-location.dto';
 import { throwIfEmpty } from 'rxjs';
+import { CompanyService } from '../company/company.service';
 
 @Injectable()
 export class BinLocationService {
   constructor(
     @InjectRepository(BinLocation) private repository: Repository<BinLocation>,
+    private companyService: CompanyService,
   ) {}
 
   async createBinLocation(
@@ -16,6 +18,10 @@ export class BinLocationService {
   ): Promise<BinLocation> {
     try {
       const binLocation = this.getBinLocationFromDTO(binLocationDTO);
+      const company = await this.companyService.findCompanyByUid(
+        binLocationDTO.companyId,
+      );
+      binLocation.company = company;
       return await binLocation.save();
     } catch (e) {
       console.error('Failed to create bin location', e);
@@ -77,7 +83,7 @@ export class BinLocationService {
       id: binLocation.uid,
       name: binLocation.name,
       description: binLocation.description,
-      companyId: binLocation.company.uid,
+      companyId: binLocation?.company?.uid,
     };
   }
 }
