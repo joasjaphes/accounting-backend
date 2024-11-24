@@ -70,6 +70,7 @@ export class PriceCategoryService {
     priceCategoryDTO: PriceCategoryDTO,
     priceCategory = new PriceCategory(),
   ) {
+    priceCategory.uid = priceCategoryDTO.id;
     priceCategory.name = priceCategoryDTO.name;
     priceCategory.description = priceCategoryDTO.description;
     priceCategory.profitMargin = priceCategoryDTO.profitMargin;

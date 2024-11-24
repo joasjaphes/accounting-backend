@@ -8,6 +8,7 @@ export class PriceCategoryController {
 
   @Post()
   async createPriceCategory(@Body() priceCategory: PriceCategoryDTO) {
+    console.log('priceCategory', priceCategory);
     try {
       return await this.priceCategoryService.savePriceCategory(priceCategory);
     } catch (e) {
