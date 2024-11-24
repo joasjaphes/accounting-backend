@@ -46,9 +46,11 @@ export class JournalEntryService {
     }
   }
 
-  async getJournalEntries() {
+  async getJournalEntries(companyUid: string) {
     try {
-      const journals = await this.repository.find();
+      const journals = await this.repository.find({
+        where: { company: { uid: companyUid } },
+      });
       return journals.map((journal) =>
         this.getJournalEntryDTOFromPayload(journal),
       );

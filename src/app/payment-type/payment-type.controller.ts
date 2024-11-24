@@ -34,9 +34,9 @@ export class PaymentTypeController {
   }
 
   @Get()
-  async getPaymentTypes() {
+  async getPaymentTypes(@CompanyUid() companyUid: string) {
     try {
-      return await this.paymentTypeService.getPaymentTypes();
+      return await this.paymentTypeService.getPaymentTypes(companyUid);
     } catch (e) {
       console.error('Failed to get paymentTypes', e);
       throw e;

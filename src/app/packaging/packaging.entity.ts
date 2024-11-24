@@ -21,4 +21,6 @@ export class Packaging extends BaseEntity {
   pieces: number;
   @ManyToOne(() => Company, (company) => company.packagings, { eager: true })
   company: Company;
+  @Column()
+  companyId: number;
 }

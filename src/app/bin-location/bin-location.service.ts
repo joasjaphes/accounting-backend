@@ -60,9 +60,11 @@ export class BinLocationService {
     }
   }
 
-  async getBinLocations(): Promise<BinLocationDTO[]> {
+  async getBinLocations(companyUid): Promise<BinLocationDTO[]> {
     try {
-      const binLocations = await this.repository.find();
+      const binLocations = await this.repository.find({
+        where: { company: { uid: companyUid } },
+      });
       return binLocations.map((binLocation) =>
         this.getBinLocationDTOFromBinLocation(binLocation),
       );

@@ -42,9 +42,11 @@ export class InvoiceService {
     }
   }
 
-  async getInvoices() {
+  async getInvoices(companyUid: string) {
     try {
-      const invoices = await this.invoiceRepository.find();
+      const invoices = await this.invoiceRepository.find({
+        where: { company: { uid: companyUid } },
+      });
       return invoices.map((invoice) => this.getInvoiceDTO(invoice));
     } catch (e) {
       throw e;

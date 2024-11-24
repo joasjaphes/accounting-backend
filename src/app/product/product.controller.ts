@@ -1,5 +1,7 @@
 import { Body, Controller, Post, Get } from '@nestjs/common';
 import { ProductService } from './product.service';
+import { Company } from '../company/company.entity';
+import { CompanyUid } from '../decorators/company.decorator';
 
 @Controller('products')
 export class ProductController {
@@ -14,9 +16,9 @@ export class ProductController {
   }
 
   @Get()
-  async getProducts() {
+  async getProducts(@CompanyUid() companyUid: string) {
     try {
-      return await this.productService.getProducts();
+      return await this.productService.getProducts(companyUid);
     } catch (e) {
       throw e;
     }

@@ -48,9 +48,11 @@ export class AccountService {
     }
   }
 
-  async getAllAccounts(): Promise<AccountDTO[]> {
+  async getAllAccounts(companyUid): Promise<AccountDTO[]> {
     try {
-      const accounts: Account[] = await this.repository.find();
+      const accounts: Account[] = await this.repository.find({
+        where: { company: { uid: companyUid } },
+      });
       return accounts.map((account) => this.getAccountDTOFromPayload(account));
     } catch (e) {
       console.error(e);

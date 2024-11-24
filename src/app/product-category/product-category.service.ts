@@ -58,9 +58,11 @@ export class ProductCategoryService {
     }
   }
 
-  async getProductCategories() {
+  async getProductCategories(companyUid: string) {
     try {
-      const productCategories = await this.repository.find();
+      const productCategories = await this.repository.find({
+        where: { company: { uid: companyUid } },
+      });
       return productCategories.map((productCategory) =>
         this.getDTOFromProductCategory(productCategory),
       );

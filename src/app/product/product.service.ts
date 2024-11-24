@@ -39,9 +39,11 @@ export class ProductService {
     }
   }
 
-  async getProducts(): Promise<ProductDTO[]> {
+  async getProducts(companyUid): Promise<ProductDTO[]> {
     try {
-      const products = await this.repository.find();
+      const products = await this.repository.find({
+        where: { company: { uid: companyUid } },
+      });
       return products.map((product) => this.getProductDTOFromEntity(product));
     } catch (e) {
       throw e;

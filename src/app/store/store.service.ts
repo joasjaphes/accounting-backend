@@ -46,9 +46,11 @@ export class StoreService {
     }
   }
 
-  async getStores() {
+  async getStores(companyUid: string) {
     try {
-      const stores = await this.repository.find();
+      const stores = await this.repository.find({
+        where: { company: { uid: companyUid } },
+      });
       return stores.map((store) => this.getStoreDTOFromStore(store));
     } catch (e) {
       console.error('Failed to get stores', e);

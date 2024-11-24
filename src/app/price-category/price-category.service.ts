@@ -61,9 +61,11 @@ export class PriceCategoryService {
     }
   }
 
-  async getPriceCategories() {
+  async getPriceCategories(companyUid: string) {
     try {
-      const priceCategories = await this.repository.find();
+      const priceCategories = await this.repository.find({
+        where: { company: { uid: companyUid } },
+      });
       return priceCategories.map((priceCategory) =>
         this.getPriceCategoryDTOFromPriceCategory(priceCategory),
       );

@@ -20,9 +20,9 @@ export class PackagingController {
   }
 
   @Get()
-  async getPackagings() {
+  async getPackagings(@CompanyUid() companyUid: string) {
     try {
-      return await this.packagingService.getPackagings();
+      return await this.packagingService.getPackagings(companyUid);
     } catch (e) {
       console.error('Failed to get packagings', e);
       throw e;

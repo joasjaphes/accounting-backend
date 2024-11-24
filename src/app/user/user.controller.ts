@@ -11,6 +11,7 @@ import { UserDTO } from './user.dto';
 import { isPasswordValid } from 'src/shared/constants';
 import { CredentialDTO } from './credentials.dto';
 import { AuthGuard } from '../guards/auth.guard';
+import { CompanyUid } from '../decorators/company.decorator';
 
 @Controller('users')
 export class UserController {
@@ -18,8 +19,8 @@ export class UserController {
 
   @UseGuards(AuthGuard)
   @Get()
-  async getUsers() {
-    return await this.userService.getAllUsers();
+  async getUsers(@CompanyUid() companyUid: string): Promise<UserDTO[]> {
+    return await this.userService.getAllUsers(companyUid);
   }
   // @UseGuards(AuthGuard)
   @Post()

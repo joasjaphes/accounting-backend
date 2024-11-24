@@ -54,9 +54,11 @@ export class FinancialPeriodService {
     }
   }
 
-  async getFinancialPeriods() {
+  async getFinancialPeriods(companyUid: string) {
     try {
-      const financialPeriods = await this.repository.find();
+      const financialPeriods = await this.repository.find({
+        where: { company: { uid: companyUid } },
+      });
       return financialPeriods.map((financialPeriod) =>
         this.getFinancialPeriodDTOFromFinancialPeriod(financialPeriod),
       );

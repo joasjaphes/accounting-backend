@@ -48,9 +48,9 @@ export class CustomerController {
   }
 
   @Get('')
-  async getAllCustomers() {
+  async getAllCustomers(@CompanyUid() companyUid: string) {
     try {
-      return await this.customerService.getAllCustomers();
+      return await this.customerService.getAllCustomers(companyUid);
     } catch (e) {
       throw e;
     }

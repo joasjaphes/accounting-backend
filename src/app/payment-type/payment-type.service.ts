@@ -44,9 +44,11 @@ export class PaymentTypeService {
     }
   }
 
-  async getPaymentTypes() {
+  async getPaymentTypes(companyUid: string) {
     try {
-      const paymentTypes = await this.repository.find();
+      const paymentTypes = await this.repository.find({
+        where: { company: { uid: companyUid } },
+      });
       return paymentTypes.map((paymentType) =>
         this.getPaymentTypeDTOFromPaymentType(paymentType),
       );

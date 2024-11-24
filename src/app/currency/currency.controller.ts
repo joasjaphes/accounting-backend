@@ -1,6 +1,8 @@
 import { Body, Controller, Get, Post, Put } from '@nestjs/common';
 import { CurrencyService } from './currency.service';
 import { CurrencyDTO } from './currency.dto';
+import { Company } from '../company/company.entity';
+import { CompanyUid } from '../decorators/company.decorator';
 
 @Controller('currencies')
 export class CurrencyController {
@@ -27,9 +29,11 @@ export class CurrencyController {
   }
 
   @Get()
-  async getCurrencies() {
+  async getCurrencies(
+    @CompanyUid() companyUid: string,
+  ): Promise<CurrencyDTO[]> {
     try {
-      return await this.currencyService.getCurrencies();
+      return await this.currencyService.getCurrencies(companyUid);
     } catch (e) {
       console.error('Failed to get currency', e);
       throw e;

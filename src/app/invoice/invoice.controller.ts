@@ -21,9 +21,9 @@ export class InvoiceController {
     }
   }
   @Get('')
-  async getInvoices() {
+  async getInvoices(@CompanyUid() companyUid: string) {
     try {
-      return await this.invoiceService.getInvoices();
+      return await this.invoiceService.getInvoices(companyUid);
     } catch (e) {
       throw e;
     }

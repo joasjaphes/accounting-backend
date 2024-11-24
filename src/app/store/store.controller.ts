@@ -28,9 +28,9 @@ export class StoreController {
   }
 
   @Get()
-  async getStores() {
+  async getStores(@CompanyUid() companyUid: string) {
     try {
-      return await this.storeService.getStores();
+      return await this.storeService.getStores(companyUid);
     } catch (e) {
       console.error('Failed to get stores', e);
       throw e;

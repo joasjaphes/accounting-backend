@@ -27,7 +27,7 @@ export class PriceCategoryController {
   @Get()
   async getPriceCategories(@CompanyUid() companyUid) {
     try {
-      return await this.priceCategoryService.getPriceCategories();
+      return await this.priceCategoryService.getPriceCategories(companyUid);
     } catch (e) {
       console.error('Failed to get price categories', e);
       throw e;

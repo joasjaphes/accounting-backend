@@ -76,10 +76,10 @@ export class CustomerService {
     }
   }
 
-  async getAllCustomers() {
+  async getAllCustomers(companyUid: string) {
     try {
       const customers = await this.repository.find({
-        where: { deleted: false },
+        where: { deleted: false, company: { uid: companyUid } },
       });
       return customers.map((customer) => this.getCustomerDTO(customer));
     } catch (e) {

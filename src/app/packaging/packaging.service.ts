@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Packaging } from './packaging.entity';
 import { PackagingDTO } from './packaging.dto';
@@ -51,9 +51,11 @@ export class PackagingService {
       console.error('Failed to get packaging by UID');
     }
   }
-  async getPackagings() {
+  async getPackagings(companyUid: string) {
     try {
-      const packagings = await this.repository.find();
+      const packagings = await this.repository.find({
+        where: { company: { uid: companyUid } },
+      });
       return packagings.map((packaging) =>
         this.getPackagingDTOFromPackaging(packaging),
       );

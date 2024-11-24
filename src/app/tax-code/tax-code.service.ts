@@ -44,9 +44,11 @@ export class TaxCodeService {
     }
   }
 
-  async getTaxCodes() {
+  async getTaxCodes(companyUid: string) {
     try {
-      const taxCodes = await this.repository.find();
+      const taxCodes = await this.repository.find({
+        where: { company: { uid: companyUid } },
+      });
       return taxCodes.map((taxCode) => this.getTaxCodeDTOFromTaxCode(taxCode));
     } catch (e) {
       console.error('Failed to get tax codes', e);

@@ -31,9 +31,9 @@ export class TaxCodeController {
   }
 
   @Get()
-  async getTaxCodes() {
+  async getTaxCodes(@CompanyUid() companyUid: string) {
     try {
-      return await this.taxCodeService.getTaxCodes();
+      return await this.taxCodeService.getTaxCodes(companyUid);
     } catch (e) {
       console.error('Failed to get tax codes', e);
       throw e;

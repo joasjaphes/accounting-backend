@@ -28,9 +28,11 @@ export class UserService {
     }
   }
 
-  async getAllUsers(): Promise<UserDTO[]> {
+  async getAllUsers(companyUid): Promise<UserDTO[]> {
     try {
-      const users: User[] = await this.repository.find();
+      const users: User[] = await this.repository.find({
+        where: { company: { uid: companyUid } },
+      });
       return users.map((user) => this.getUserDTOFromUSer(user));
     } catch (e) {
       console.error('Failed to get users', e);

@@ -20,9 +20,9 @@ export class JournalEntryController {
     }
   }
   @Get()
-  async getJournalEntries() {
+  async getJournalEntries(@CompanyUid() companyUid: string) {
     try {
-      return await this.journalService.getJournalEntries();
+      return await this.journalService.getJournalEntries(companyUid);
     } catch (e) {
       throw e;
     }

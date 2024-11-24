@@ -24,9 +24,9 @@ export class BinLocationController {
   }
 
   @Get()
-  async getBinLocations() {
+  async getBinLocations(@CompanyUid() companyUid: string) {
     try {
-      return await this.binLocationService.getBinLocations();
+      return await this.binLocationService.getBinLocations(companyUid);
     } catch (e) {
       console.error('Failed to get bin locations', e);
       throw e;

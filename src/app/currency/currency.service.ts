@@ -41,9 +41,11 @@ export class CurrencyService {
     }
   }
 
-  async getCurrencies() {
+  async getCurrencies(companyUid: string) {
     try {
-      const currencies = await this.repository.find();
+      const currencies = await this.repository.find({
+        where: { company: { uid: companyUid } },
+      });
       return currencies.map((currency) =>
         this.getCurrencyDTOFromCurrency(currency),
       );

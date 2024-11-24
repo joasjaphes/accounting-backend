@@ -36,9 +36,11 @@ export class ProductCategoryController {
   }
 
   @Get()
-  async getProductCategories() {
+  async getProductCategories(@CompanyUid() companyUid: string) {
     try {
-      return await this.productCategoriesService.getProductCategories();
+      return await this.productCategoriesService.getProductCategories(
+        companyUid,
+      );
     } catch (e) {
       console.error('Failed to get product categories', e);
       throw e;

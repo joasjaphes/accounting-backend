@@ -2,6 +2,7 @@ import { Body, Controller, Get, Post, Put } from '@nestjs/common';
 import { FinancialPeriodDTO } from './financial-period.dto';
 import { FinancialPeriodService } from './financial-period.service';
 import { CompanyUid } from '../decorators/company.decorator';
+import { Company } from '../company/company.entity';
 
 @Controller('financialPeriods')
 export class FinancialPeriodController {
@@ -36,9 +37,9 @@ export class FinancialPeriodController {
   }
 
   @Get()
-  async getFinancialPeriods() {
+  async getFinancialPeriods(@CompanyUid() companyUid: string) {
     try {
-      return await this.financialPeriodService.getFinancialPeriods();
+      return await this.financialPeriodService.getFinancialPeriods(companyUid);
     } catch (e) {
       console.error('Failed to get financial periods', e);
       throw e;

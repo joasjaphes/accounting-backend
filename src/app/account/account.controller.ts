@@ -17,8 +17,8 @@ export class AccountController {
     return await this.accountService.createAccount(account, companyUid);
   }
   @Get()
-  async getAllAccounts(): Promise<AccountDTO[]> {
-    return await this.accountService.getAllAccounts();
+  async getAllAccounts(@CompanyUid() companyUid): Promise<AccountDTO[]> {
+    return await this.accountService.getAllAccounts(companyUid);
   }
   @Get(':uid')
   async getAccountByUId(uid: string): Promise<AccountDTO> {
