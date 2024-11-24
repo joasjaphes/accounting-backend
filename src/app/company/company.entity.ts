@@ -17,6 +17,10 @@ import { ProductCategory } from '../product-category/product-category.entity';
 import { Packaging } from '../packaging/packaging.entity';
 import { BinLocation } from '../bin-location/bin-location.entity';
 import { PriceCategory } from '../price-category/price-category.entity';
+import { Product } from '../product/product.entity';
+import { JournalEntry } from '../journal-entry/journal-entry.entity';
+import { Invoice } from '../invoice/invoice.entity';
+import { Customer } from '../customer/customer.entity';
 
 @Entity()
 export class Company extends BaseEntity {
@@ -78,4 +82,12 @@ export class Company extends BaseEntity {
   binLocations: BinLocation[];
   @OneToMany(() => PriceCategory, (priceCategory) => priceCategory.company)
   priceCategories: PriceCategory[];
+  @OneToMany(() => Product, (product) => product.company)
+  products: Product[];
+  @OneToMany(() => JournalEntry, (journalEntry) => journalEntry.company)
+  journalEntries: JournalEntry[];
+  @OneToMany(() => Invoice, (invoice) => invoice.company)
+  invoices: Invoice[];
+  @OneToMany(() => Customer, (customer) => customer.company)
+  customers: Customer[];
 }

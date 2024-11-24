@@ -1,16 +1,21 @@
 import { Body, Controller, Get, Post, Put } from '@nestjs/common';
 import { ProductCategoryDTO } from './product-category.dto';
 import { ProductCategoryService } from './product-category.service';
+import { CompanyUid } from '../decorators/company.decorator';
 
 @Controller('productCategories')
 export class ProductCategoryController {
   constructor(private productCategoriesService: ProductCategoryService) {}
 
   @Post()
-  async createProductCategory(@Body() productCategory: ProductCategoryDTO) {
+  async createProductCategory(
+    @Body() productCategory: ProductCategoryDTO,
+    @CompanyUid() companyUid: string,
+  ) {
     try {
       return await this.productCategoriesService.saveProductCategory(
         productCategory,
+        companyUid,
       );
     } catch (e) {
       console.error('Failed to create product category', e);

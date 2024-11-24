@@ -12,11 +12,11 @@ export class StoreService {
     private companyService: CompanyService,
   ) {}
 
-  async createStore(storeDTO: StoreDTO) {
+  async createStore(storeDTO: StoreDTO, companyUid?: string) {
     try {
       const store = this.getStoreFromDTO(storeDTO);
       const company = await this.companyService.findCompanyByUid(
-        storeDTO.companyId,
+        companyUid || storeDTO.companyId,
       );
       store.company = company;
       return await store.save();
@@ -26,11 +26,11 @@ export class StoreService {
     }
   }
 
-  async saveStore(storeDTO: StoreDTO) {
+  async saveStore(storeDTO: StoreDTO, companyUid?: string) {
     try {
       const refStore = await this.findStoreByUid(storeDTO.id);
       if (!refStore) {
-        await this.createStore(storeDTO);
+        await this.createStore(storeDTO, companyUid);
       } else {
         refStore.name = storeDTO.name;
         refStore.description = storeDTO.description;

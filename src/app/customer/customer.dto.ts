@@ -4,4 +4,5 @@ export interface CustomerDTO {
   address?: string;
   phoneNumber?: string;
   email?: string;
+  companyId?: string;
 }

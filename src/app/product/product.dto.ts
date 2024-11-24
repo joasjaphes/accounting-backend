@@ -4,4 +4,5 @@ export interface ProductDTO {
   description: string;
   type: string;
   price: number;
+  companyId?: string;
 }

@@ -12,11 +12,11 @@ export class CurrencyService {
     private companyService: CompanyService,
   ) {}
 
-  async createCurrency(currencyDTO: CurrencyDTO) {
+  async createCurrency(currencyDTO: CurrencyDTO, companyUid?: string) {
     try {
       const currency = this.getCurrencyFromDTO(currencyDTO);
       const company = await this.companyService.findCompanyByUid(
-        currencyDTO.companyId,
+        companyUid || currencyDTO.companyId,
       );
       currency.company = company;
       return await currency.save();
@@ -26,18 +26,14 @@ export class CurrencyService {
     }
   }
 
-  async saveCurrency(currencyDTO: CurrencyDTO) {
+  async saveCurrency(currencyDTO: CurrencyDTO, companyUid?: string) {
     try {
       const refCurrency = await this.findCurrencyByUid(currencyDTO.id);
       if (!refCurrency) {
-        await this.createCurrency(currencyDTO);
+        await this.createCurrency(currencyDTO, companyUid);
       } else {
-        refCurrency.name = currencyDTO.name;
-        refCurrency.description = currencyDTO.description;
-        refCurrency.exchangeRate = currencyDTO.exchangeRate;
-        refCurrency.isDefaultLocalCurrency = currencyDTO.isDefaultLocalCurrency;
-        refCurrency.symbol = currencyDTO.symbol;
-        return await refCurrency.save();
+        const payload = this.getCurrencyFromDTO(currencyDTO, refCurrency);
+        return await payload.save();
       }
     } catch (e) {
       console.error('Failed to update currency', e);
@@ -65,8 +61,10 @@ export class CurrencyService {
     }
   }
 
-  getCurrencyFromDTO(currencyDto: CurrencyDTO): Currency {
-    const currency = new Currency();
+  getCurrencyFromDTO(
+    currencyDto: CurrencyDTO,
+    currency = new Currency(),
+  ): Currency {
     currency.uid = currencyDto.id;
     currency.name = currencyDto.name;
     currency.description = currencyDto.description;

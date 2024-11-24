@@ -5,4 +5,5 @@ export interface JournalEntryDTO {
   date: string;
   description: string;
   transactions?: TransactionDTO[];
+  companyId?: string;
 }

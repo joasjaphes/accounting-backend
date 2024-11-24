@@ -2,10 +2,12 @@ import {
   BaseEntity,
   Column,
   Entity,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { TransactionEntity } from '../transactions/transaction.entity';
+import { Company } from '../company/company.entity';
 
 @Entity()
 export class JournalEntry extends BaseEntity {
@@ -21,4 +23,6 @@ export class JournalEntry extends BaseEntity {
     eager: true,
   })
   transactions: TransactionEntity[];
+  @ManyToOne(() => Company, (company) => company.journalEntries)
+  company: Company;
 }

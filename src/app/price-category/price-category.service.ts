@@ -13,11 +13,14 @@ export class PriceCategoryService {
     private companyService: CompanyService,
   ) {}
 
-  async createPriceCategory(priceCategoryDTO: PriceCategoryDTO) {
+  async createPriceCategory(
+    priceCategoryDTO: PriceCategoryDTO,
+    companyUid?: string,
+  ) {
     try {
       const priceCategory = this.getPriceCategoryFromDTO(priceCategoryDTO);
       const company = await this.companyService.findCompanyByUid(
-        priceCategoryDTO.companyId,
+        companyUid || priceCategoryDTO.companyId,
       );
       priceCategory.company = company;
       return await priceCategory.save();
@@ -27,13 +30,16 @@ export class PriceCategoryService {
     }
   }
 
-  async savePriceCategory(priceCategoryDTO: PriceCategoryDTO) {
+  async savePriceCategory(
+    priceCategoryDTO: PriceCategoryDTO,
+    companyUid: string,
+  ) {
     try {
       const refPriceCategory = await this.findPriceCategoryByUID(
         priceCategoryDTO.id,
       );
       if (!refPriceCategory) {
-        await this.createPriceCategory(priceCategoryDTO);
+        await this.createPriceCategory(priceCategoryDTO, companyUid);
       } else {
         const payload = this.getPriceCategoryFromDTO(
           priceCategoryDTO,

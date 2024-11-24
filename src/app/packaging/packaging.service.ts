@@ -12,11 +12,11 @@ export class PackagingService {
     private companyService: CompanyService,
   ) {}
 
-  async createPackaging(packagingDTO: PackagingDTO) {
+  async createPackaging(packagingDTO: PackagingDTO, companyUid?: string) {
     try {
       const packaging = this.getPackagingFromDTO(packagingDTO);
       const company = await this.companyService.findCompanyByUid(
-        packagingDTO.companyId,
+        companyUid || packagingDTO.companyId,
       );
       packaging.company = company;
       return await packaging.save();
@@ -26,11 +26,11 @@ export class PackagingService {
     }
   }
 
-  async savePackaging(packaging: PackagingDTO) {
+  async savePackaging(packaging: PackagingDTO, companyUid?: string) {
     try {
       const refPackaging = await this.getPackagingByUID(packaging.id);
       if (!refPackaging) {
-        await this.createPackaging(packaging);
+        await this.createPackaging(packaging, companyUid);
       } else {
         const packagingPayload = this.getPackagingFromDTO(
           packaging,

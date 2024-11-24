@@ -3,16 +3,22 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Customer } from './customer.entity';
 import { Repository } from 'typeorm';
 import { CustomerDTO } from './customer.dto';
+import { CompanyService } from '../company/company.service';
 
 @Injectable()
 export class CustomerService {
   constructor(
     @InjectRepository(Customer) private repository: Repository<Customer>,
+    private companyService: CompanyService,
   ) {}
 
-  async createCustomer(customerPayload: CustomerDTO) {
+  async createCustomer(customerPayload: CustomerDTO, companyUid?: string) {
     try {
       const customer = this.getCustomerObjectFromDTO(customerPayload);
+      const company = await this.companyService.findCompanyByUid(
+        companyUid || customerPayload.companyId,
+      );
+      customer.company = company;
       return await customer.save();
     } catch (e) {
       throw e;

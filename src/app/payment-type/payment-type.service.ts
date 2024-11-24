@@ -12,11 +12,11 @@ export class PaymentTypeService {
     private companyService: CompanyService,
   ) {}
 
-  async createPaymentType(paymentTypeDTO: PaymentTypeDTO) {
+  async createPaymentType(paymentTypeDTO: PaymentTypeDTO, companyUid?: string) {
     try {
       const paymentType = this.getPaymentTypeFromDTO(paymentTypeDTO);
       const company = await this.companyService.findCompanyByUid(
-        paymentTypeDTO.companyId,
+        companyUid || paymentTypeDTO.companyId,
       );
       paymentType.company = company;
       return await paymentType.save();
@@ -26,27 +26,17 @@ export class PaymentTypeService {
     }
   }
 
-  async savePaymentType(paymentTypeDTO: PaymentTypeDTO) {
+  async savePaymentType(paymentTypeDTO: PaymentTypeDTO, companyUid?: string) {
     try {
       const refPaymentType = await this.findPaymentTypeByUID(paymentTypeDTO.id);
       if (!refPaymentType) {
-        await this.createPaymentType(paymentTypeDTO);
+        await this.createPaymentType(paymentTypeDTO, companyUid);
       } else {
-        refPaymentType.name = paymentTypeDTO.name;
-        refPaymentType.description = paymentTypeDTO.description;
-        refPaymentType.displayInSales = paymentTypeDTO.displayInSales;
-        refPaymentType.displayInDebtorsPayments =
-          paymentTypeDTO.displayInDebtorsPayments;
-        refPaymentType.displayInCreditPayments =
-          paymentTypeDTO.displayInCreditPayments;
-        refPaymentType.displayInCustomerDeposits =
-          paymentTypeDTO.displayInCustomerDeposits;
-        refPaymentType.displayInRefunds = paymentTypeDTO.displayInRefunds;
-        refPaymentType.displayInCashierReports =
-          paymentTypeDTO.displayInCashierReports;
-        refPaymentType.displayInBankingReceivingMoney =
-          paymentTypeDTO.displayInBankingReceivingMoney;
-        return await refPaymentType.save();
+        const updatedPaymentType = this.getPaymentTypeFromDTO(
+          paymentTypeDTO,
+          refPaymentType,
+        );
+        return await updatedPaymentType.save();
       }
     } catch (e) {
       console.error('Failed to save payment type', e);
@@ -74,8 +64,10 @@ export class PaymentTypeService {
     }
   }
 
-  getPaymentTypeFromDTO(paymentTypeDTO: PaymentTypeDTO): PaymentType {
-    const paymentType = new PaymentType();
+  getPaymentTypeFromDTO(
+    paymentTypeDTO: PaymentTypeDTO,
+    paymentType = new PaymentType(),
+  ): PaymentType {
     paymentType.uid = paymentTypeDTO.id;
     paymentType.name = paymentTypeDTO.name;
     paymentType.description = paymentTypeDTO.description;

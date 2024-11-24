@@ -1,15 +1,19 @@
 import { Body, Controller, Get, Post, Put } from '@nestjs/common';
 import { TaxCodeDTO } from './tax-code.dto';
 import { TaxCodeService } from './tax-code.service';
+import { CompanyUid } from '../decorators/company.decorator';
 
 @Controller('taxCodes')
 export class TaxCodeController {
   constructor(private taxCodeService: TaxCodeService) {}
 
   @Post()
-  async createTaxCode(@Body() taxCode: TaxCodeDTO) {
+  async createTaxCode(
+    @Body() taxCode: TaxCodeDTO,
+    @CompanyUid() companyUid: string,
+  ) {
     try {
-      return await this.taxCodeService.saveTaxCode(taxCode);
+      return await this.taxCodeService.saveTaxCode(taxCode, companyUid);
     } catch (e) {
       console.error('Failed to create tax code', e);
       throw e;

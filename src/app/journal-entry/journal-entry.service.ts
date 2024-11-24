@@ -7,6 +7,7 @@ import { JournalEntryDTO } from './journal-entry.dto';
 import { TransactionService } from '../transactions/transaction.service';
 import { TransactionEntity } from '../transactions/transaction.entity';
 import { TransactionDTO } from '../transactions/transaction.dto';
+import { CompanyService } from '../company/company.service';
 
 @Injectable()
 export class JournalEntryService {
@@ -14,14 +15,18 @@ export class JournalEntryService {
     @InjectRepository(JournalEntry)
     private repository: Repository<JournalEntry>,
     private accountService: AccountService,
+    private companyService: CompanyService,
     private transactionService: TransactionService,
   ) {}
 
-  async createJournalEntry(journal: JournalEntryDTO) {
+  async createJournalEntry(journal: JournalEntryDTO, companyUid?: string) {
     console.log('Journal', journal);
     try {
       await this.saveJournalTransactions(journal.transactions);
       const journalPayload = await this.getJournalPayloadFromDTO(journal);
+      const company = await this.companyService.findCompanyByUid(
+        companyUid || journal.companyId,
+      );
       const entry = await journalPayload.save();
       return entry;
     } catch (e) {

@@ -13,12 +13,15 @@ export class ProductCategoryService {
     private companyService: CompanyService,
   ) {}
 
-  async createProductCategory(productCategoryDTO: ProductCategoryDTO) {
+  async createProductCategory(
+    productCategoryDTO: ProductCategoryDTO,
+    companyUid?: string,
+  ) {
     try {
       const productCategory =
         this.getProductCategoryFromDTO(productCategoryDTO);
       const company = await this.companyService.findCompanyByUid(
-        productCategoryDTO.companyId,
+        companyUid || productCategoryDTO.companyId,
       );
       productCategory.company = company;
       return await productCategory.save();
@@ -28,13 +31,16 @@ export class ProductCategoryService {
     }
   }
 
-  async saveProductCategory(productCategoryDTO: ProductCategoryDTO) {
+  async saveProductCategory(
+    productCategoryDTO: ProductCategoryDTO,
+    companyUid?: string,
+  ) {
     try {
       const refProductCategory = await this.findProductCategoryByUID(
         productCategoryDTO.id,
       );
       if (!refProductCategory) {
-        await this.createProductCategory(productCategoryDTO);
+        await this.createProductCategory(productCategoryDTO, companyUid);
       } else {
         refProductCategory.name = productCategoryDTO.name;
         refProductCategory.description = productCategoryDTO.description;

@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 import { InvoiceItem } from './invoice-item.entity';
 import { Customer } from '../customer/customer.entity';
+import { Company } from '../company/company.entity';
 
 @Entity()
 export class Invoice extends BaseEntity {
@@ -36,4 +37,6 @@ export class Invoice extends BaseEntity {
   items: InvoiceItem[];
   @ManyToOne(() => Customer, (customer) => customer.invoices, { eager: true })
   customer: Customer;
+  @ManyToOne(() => Company, (company) => company.invoices)
+  company: Company;
 }

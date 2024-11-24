@@ -15,11 +15,12 @@ export class BinLocationService {
 
   async createBinLocation(
     binLocationDTO: BinLocationDTO,
+    companyUid?: string,
   ): Promise<BinLocation> {
     try {
       const binLocation = this.getBinLocationFromDTO(binLocationDTO);
       const company = await this.companyService.findCompanyByUid(
-        binLocationDTO.companyId,
+        companyUid || binLocationDTO.companyId,
       );
       binLocation.company = company;
       return await binLocation.save();
@@ -29,11 +30,14 @@ export class BinLocationService {
     }
   }
 
-  async saveBinLocation(binLocationDTO: BinLocationDTO): Promise<BinLocation> {
+  async saveBinLocation(
+    binLocationDTO: BinLocationDTO,
+    companyUid,
+  ): Promise<BinLocation> {
     try {
       const refBinLocation = await this.getBinLocationByUID(binLocationDTO.id);
       if (!refBinLocation) {
-        await this.createBinLocation(binLocationDTO);
+        await this.createBinLocation(binLocationDTO, companyUid);
       } else {
         const binLocationPayload = this.getBinLocationFromDTO(
           binLocationDTO,

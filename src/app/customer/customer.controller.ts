@@ -11,15 +11,19 @@ import {
 import { CustomerService } from './customer.service';
 import { CustomerDTO } from './customer.dto';
 import { AuthGuard } from '../guards/auth.guard';
+import { CompanyUid } from '../decorators/company.decorator';
 
 @Controller('customers')
 export class CustomerController {
   constructor(private customerService: CustomerService) {}
   // @UseGuards(AuthGuard)
   @Post('')
-  async createCustomer(@Body() customerDTO: CustomerDTO) {
+  async createCustomer(
+    @Body() customerDTO: CustomerDTO,
+    @CompanyUid() companyUid: string,
+  ) {
     try {
-      return await this.customerService.createCustomer(customerDTO);
+      return await this.customerService.createCustomer(customerDTO, companyUid);
     } catch (e) {
       throw e;
     }

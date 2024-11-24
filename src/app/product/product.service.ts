@@ -3,17 +3,37 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './product.entity';
 import { Repository } from 'typeorm';
 import { ProductDTO } from './product.dto';
+import { CompanyService } from '../company/company.service';
 
 @Injectable()
 export class ProductService {
   constructor(
     @InjectRepository(Product) private repository: Repository<Product>,
+    private companyService: CompanyService,
   ) {}
+
+  async createProduct(product: ProductDTO, companyUid?: string) {
+    try {
+      const payload = this.getProductPayloadFromDTO(product);
+      const company = await this.companyService.findCompanyByUid(
+        companyUid || product.companyId,
+      );
+      payload.company = company;
+      return await payload.save();
+    } catch (e) {
+      throw e;
+    }
+  }
 
   async saveProduct(product: ProductDTO) {
     try {
-      const payload = this.getProductPayloadFromDTO(product);
-      await payload.save();
+      const refProduct = await this.findProductByUid(product.id);
+      if (!refProduct) {
+        await this.createProduct(product);
+      } else {
+        const payload = this.getProductPayloadFromDTO(product, refProduct);
+        return await payload.save();
+      }
     } catch (e) {
       throw e;
     }
@@ -45,8 +65,10 @@ export class ProductService {
     };
   }
 
-  getProductPayloadFromDTO(product: ProductDTO): Product {
-    const newProduct = new Product();
+  getProductPayloadFromDTO(
+    product: ProductDTO,
+    newProduct = new Product(),
+  ): Product {
     newProduct.uid = product.id;
     newProduct.name = product.name;
     newProduct.description = product.description;

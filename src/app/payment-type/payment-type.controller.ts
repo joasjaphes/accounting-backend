@@ -1,15 +1,22 @@
 import { Body, Controller, Get, Post, Put } from '@nestjs/common';
 import { PaymentTypeDTO } from './payment-type.dto';
 import { PaymentTypeService } from './payment-type.service';
+import { CompanyUid } from '../decorators/company.decorator';
 
 @Controller('paymentTypes')
 export class PaymentTypeController {
   constructor(private paymentTypeService: PaymentTypeService) {}
 
   @Post()
-  async createPaymentType(@Body() paymentType: PaymentTypeDTO) {
+  async createPaymentType(
+    @Body() paymentType: PaymentTypeDTO,
+    @CompanyUid() companyUid: string,
+  ) {
     try {
-      return await this.paymentTypeService.savePaymentType(paymentType);
+      return await this.paymentTypeService.savePaymentType(
+        paymentType,
+        companyUid,
+      );
     } catch (e) {
       console.error('Failed to create payment type', e);
       throw e;

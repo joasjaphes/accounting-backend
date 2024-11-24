@@ -13,12 +13,15 @@ export class FinancialPeriodService {
     private companyService: CompanyService,
   ) {}
 
-  async createFinancialPeriod(financialPeriodDTO: FinancialPeriodDTO) {
+  async createFinancialPeriod(
+    financialPeriodDTO: FinancialPeriodDTO,
+    companyUid?: string,
+  ) {
     try {
       const financialPeriod =
         this.getFinancialPeriodFromFinancialPeriodDTO(financialPeriodDTO);
       const company = await this.companyService.findCompanyByUid(
-        financialPeriodDTO.companyId,
+        companyUid || financialPeriodDTO.companyId,
       );
       financialPeriod.company = company;
       return await financialPeriod.save();
@@ -28,13 +31,16 @@ export class FinancialPeriodService {
     }
   }
 
-  async saveFinancialPeriod(financialPeriodDTO: FinancialPeriodDTO) {
+  async saveFinancialPeriod(
+    financialPeriodDTO: FinancialPeriodDTO,
+    companyUid?: string,
+  ) {
     try {
       const refFinancialPeriod = await this.findFinancialPeriodByUid(
         financialPeriodDTO.id,
       );
       if (!refFinancialPeriod) {
-        await this.createFinancialPeriod(financialPeriodDTO);
+        await this.createFinancialPeriod(financialPeriodDTO, companyUid);
       } else {
         const updatedTaxCode = this.getFinancialPeriodFromFinancialPeriodDTO(
           financialPeriodDTO,

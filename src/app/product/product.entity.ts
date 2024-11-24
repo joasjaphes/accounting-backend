@@ -2,11 +2,13 @@ import {
   BaseEntity,
   Column,
   Entity,
+  ManyToOne,
   OneToMany,
   PrimaryColumn,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { InvoiceItem } from '../invoice/invoice-item.entity';
+import { Company } from '../company/company.entity';
 
 @Entity()
 export class Product extends BaseEntity {
@@ -24,4 +26,6 @@ export class Product extends BaseEntity {
   price: number;
   @OneToMany(() => InvoiceItem, (item) => item.product)
   invoiceItems: InvoiceItem[];
+  @ManyToOne(() => Company, (company) => company.products)
+  company: Company;
 }

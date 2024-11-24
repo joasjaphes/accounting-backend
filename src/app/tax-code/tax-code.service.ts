@@ -12,11 +12,11 @@ export class TaxCodeService {
     private companyService: CompanyService,
   ) {}
 
-  async createTaxCode(taxCodeDTO: TaxCodeDTO) {
+  async createTaxCode(taxCodeDTO: TaxCodeDTO, companyUid?: string) {
     try {
       const taxCode = this.getTaxCodeFromTaxCodeDTO(taxCodeDTO);
       const company = await this.companyService.findCompanyByUid(
-        taxCodeDTO.companyId,
+        companyUid || taxCodeDTO.companyId,
       );
       taxCode.company = company;
       return await taxCode.save();
@@ -26,11 +26,11 @@ export class TaxCodeService {
     }
   }
 
-  async saveTaxCode(taxCodeDTO: TaxCodeDTO) {
+  async saveTaxCode(taxCodeDTO: TaxCodeDTO, companyUid?: string) {
     try {
       const refTaxCode = await this.findTaxCodeByUid(taxCodeDTO.id);
       if (!refTaxCode) {
-        await this.createTaxCode(taxCodeDTO);
+        await this.createTaxCode(taxCodeDTO, companyUid);
       } else {
         const updatedTaxCode = this.getTaxCodeFromTaxCodeDTO(
           taxCodeDTO,

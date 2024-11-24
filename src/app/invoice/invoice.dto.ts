@@ -15,4 +15,5 @@ export interface InvoiceDTO {
   customerId: string;
   customer?: CustomerDTO;
   invoiceNumber: string;
+  companyId?: string;
 }

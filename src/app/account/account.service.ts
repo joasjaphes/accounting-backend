@@ -12,10 +12,14 @@ export class AccountService {
     private companyService: CompanyService,
   ) {}
 
-  async createAccount(account: AccountDTO): Promise<AccountDTO> {
+  async createAccount(
+    account: AccountDTO,
+    companyUid?: string,
+  ): Promise<AccountDTO> {
     try {
       const accountPayload: Account = await this.getAccountPayloadFromDTO(
         account,
+        companyUid,
       );
       const createdAccount: Account = await this.repository.save(
         accountPayload,
@@ -88,8 +92,13 @@ export class AccountService {
     };
   }
 
-  async getAccountPayloadFromDTO(account: AccountDTO): Promise<Account> {
-    const company = await this.companyService.getCompanyByUId(account.company);
+  async getAccountPayloadFromDTO(
+    account: AccountDTO,
+    companyUid?: string,
+  ): Promise<Account> {
+    const company = await this.companyService.getCompanyByUId(
+      companyUid || account.company,
+    );
     const companyPayload = await this.companyService.getCompanyPayloadFromDTO(
       company,
     );
