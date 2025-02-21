@@ -7,9 +7,9 @@ import { CompanyUid } from '../decorators/company.decorator';
 export class ProductController {
   constructor(private productService: ProductService) {}
   @Post()
-  async saveProduct(@Body() body) {
+  async saveProduct(@Body() body, @CompanyUid() companyUid) {
     try {
-      return await this.productService.saveProduct(body);
+      return await this.productService.saveProduct(body, companyUid);
     } catch (e) {
       throw e;
     }

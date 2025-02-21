@@ -3,6 +3,7 @@ import { BinLocationController } from 'src/app/bin-location/bin-location.control
 import { CompanyController } from 'src/app/company/company.controller';
 import { CurrencyController } from 'src/app/currency/currency.controller';
 import { CustomerController } from 'src/app/customer/customer.controller';
+import { FileController } from 'src/app/file-uploader/file.controller';
 import { FinancialPeriodController } from 'src/app/financial-period/financial-period.controller';
 import { InvoiceController } from 'src/app/invoice/invoice.controller';
 import { JournalEntryController } from 'src/app/journal-entry/journal-entry.controller';
@@ -32,4 +33,5 @@ export const controllers = [
   PackagingController,
   BinLocationController,
   PriceCategoryController,
+  FileController,
 ];

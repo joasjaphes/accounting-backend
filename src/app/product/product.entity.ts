@@ -24,6 +24,8 @@ export class Product extends BaseEntity {
   type: string;
   @Column({ nullable: true })
   price: number;
+  @Column({ nullable: true })
+  imageUrl: string;
   @OneToMany(() => InvoiceItem, (item) => item.product)
   invoiceItems: InvoiceItem[];
   @ManyToOne(() => Company, (company) => company.products)

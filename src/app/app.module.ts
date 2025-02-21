@@ -8,6 +8,8 @@ import { services } from 'src/database/services';
 import { controllers } from 'src/database/controllers';
 import { AuthGuard } from './guards/auth.guard';
 import { ProductService } from './product/product.service';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 const DATABASE_HOST = process.env.DATABASE_HOST || 'localhost';
 const DATABASE_PORT: number =
@@ -30,6 +32,10 @@ const DATABASE_TYPE: any = process.env.DATABASE_TYPE || 'postgres';
       synchronize: true,
     }),
     TypeOrmModule.forFeature([...entities]),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '../../'),
+      renderPath: '/uploads',
+    }),
   ],
   controllers: [AppController, ...controllers],
   providers: [AppService, ...services, AuthGuard, ProductService],

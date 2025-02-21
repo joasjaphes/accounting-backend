@@ -25,11 +25,11 @@ export class ProductService {
     }
   }
 
-  async saveProduct(product: ProductDTO) {
+  async saveProduct(product: ProductDTO, companyUid: string) {
     try {
       const refProduct = await this.findProductByUid(product.id);
       if (!refProduct) {
-        await this.createProduct(product);
+        await this.createProduct(product, companyUid);
       } else {
         const payload = this.getProductPayloadFromDTO(product, refProduct);
         return await payload.save();
@@ -64,6 +64,7 @@ export class ProductService {
       description: product.description,
       type: product.type,
       price: product.price,
+      imageUrl: product.imageUrl,
     };
   }
 
@@ -75,7 +76,8 @@ export class ProductService {
     newProduct.name = product.name;
     newProduct.description = product.description;
     newProduct.type = product.type;
-    newProduct.price = product.price;
+    newProduct.price = product.price ?? 0;
+    newProduct.imageUrl = product.imageUrl;
     return newProduct;
   }
 }

@@ -7,6 +7,7 @@ import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 
 import { AppModule } from './app/app.module';
+import { MulterModule } from '@nestjs/platform-express';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
@@ -19,4 +20,10 @@ async function bootstrap() {
   );
 }
 
-bootstrap();
+bootstrap().then(() => {
+  MulterModule.registerAsync({
+    useFactory: () => ({
+      dest: './upload',
+    }),
+  });
+});
