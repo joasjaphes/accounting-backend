@@ -1,4 +1,4 @@
-import { BaseEntity, Column, Entity, OneToMany } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 import { Invoice } from '../invoice/invoice.entity';
 import { CommonEntity } from 'src/shared/common-entity';
 

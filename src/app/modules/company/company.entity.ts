@@ -1,26 +1,4 @@
-import {
-  BaseEntity,
-  Column,
-  Entity,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-import { User } from '../user/user.entity';
-import { Account } from '../account/account.entity';
-import { TransactionEntity } from '../transactions/transaction.entity';
-import { Currency } from '../currency/currency.entity';
-import { Store } from '../store/store.entity';
-import { PaymentType } from '../payment-type/payment-type.entity';
-import { TaxCode } from '../tax-code/tax-code.entity';
-import { FinancialPeriod } from '../financial-period/financial-period.entity';
-import { ProductCategory } from '../product-category/product-category.entity';
-import { Packaging } from '../packaging/packaging.entity';
-import { BinLocation } from '../bin-location/bin-location.entity';
-import { PriceCategory } from '../price-category/price-category.entity';
-import { Product } from '../product/product.entity';
-import { JournalEntry } from '../journal-entry/journal-entry.entity';
-import { Invoice } from '../invoice/invoice.entity';
-import { Customer } from '../customer/customer.entity';
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Company extends BaseEntity {

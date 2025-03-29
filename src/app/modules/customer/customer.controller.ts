@@ -6,11 +6,9 @@ import {
   Param,
   Post,
   Put,
-  UseGuards,
 } from '@nestjs/common';
 import { CustomerService } from './customer.service';
 import { CustomerDTO } from './customer.dto';
-import { AuthGuard } from '../../guards/auth.guard';
 import { CompanyUid } from '../../decorators/company.decorator';
 
 @Controller('customers')

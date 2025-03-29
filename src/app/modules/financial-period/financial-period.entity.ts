@@ -1,5 +1,5 @@
 import { CommonEntity } from 'src/shared/common-entity';
-import { BaseEntity, Column, Entity } from 'typeorm';
+import { Column, Entity } from 'typeorm';
 
 @Entity()
 export class FinancialPeriod extends CommonEntity {

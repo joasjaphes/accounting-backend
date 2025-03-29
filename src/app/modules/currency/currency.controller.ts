@@ -1,7 +1,6 @@
 import { Body, Controller, Get, Post, Put } from '@nestjs/common';
 import { CurrencyService } from './currency.service';
 import { CurrencyDTO } from './currency.dto';
-import { Company } from '../company/company.entity';
 import { CompanyUid } from '../../decorators/company.decorator';
 
 @Controller('currencies')

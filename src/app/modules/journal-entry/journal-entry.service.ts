@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JournalEntry } from './journal-entry.entity';
 import { Repository } from 'typeorm';
-import { AccountService } from '../account/account.service';
 import { JournalEntryDTO } from './journal-entry.dto';
 import { TransactionService } from '../transactions/transaction.service';
 import { TransactionEntity } from '../transactions/transaction.entity';
@@ -14,7 +13,6 @@ export class JournalEntryService {
   constructor(
     @InjectRepository(JournalEntry)
     private repository: Repository<JournalEntry>,
-    private accountService: AccountService,
     private companyService: CompanyService,
     private transactionService: TransactionService,
   ) {}
