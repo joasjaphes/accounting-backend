@@ -1,19 +1,8 @@
-import {
-  BaseEntity,
-  Column,
-  Entity,
-  ManyToOne,
-  PrimaryColumn,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-import { Company } from '../company/company.entity';
+import { CommonEntity } from 'src/shared/common-entity';
+import { BaseEntity, Column, Entity } from 'typeorm';
 
 @Entity()
-export class FinancialPeriod extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
-  @PrimaryColumn({ length: 11 })
-  uid: string;
+export class FinancialPeriod extends CommonEntity {
   @Column()
   name: string;
   @Column({ nullable: true })
@@ -26,6 +15,4 @@ export class FinancialPeriod extends BaseEntity {
   costingMethod: string;
   @Column()
   status: string;
-  @ManyToOne(() => Company, (company) => company.financialPeriods)
-  company: Company;
 }

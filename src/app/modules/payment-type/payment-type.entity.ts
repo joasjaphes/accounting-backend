@@ -1,19 +1,8 @@
-import {
-  BaseEntity,
-  Column,
-  Entity,
-  ManyToOne,
-  PrimaryColumn,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-import { Company } from '../company/company.entity';
+import { Column, Entity } from 'typeorm';
+import { CommonEntity } from 'src/shared/common-entity';
 
 @Entity()
-export class PaymentType extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
-  @PrimaryColumn({ length: 11 })
-  uid: string;
+export class PaymentType extends CommonEntity {
   @Column()
   name: string;
   @Column({ nullable: true })
@@ -32,6 +21,4 @@ export class PaymentType extends BaseEntity {
   displayInCashierReports?: boolean;
   @Column()
   displayInBankingReceivingMoney?: boolean;
-  @ManyToOne(() => Company, (company) => company.paymentTypes)
-  company: Company;
 }

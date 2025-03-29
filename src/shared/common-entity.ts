@@ -9,10 +9,10 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-export abstract class CommonEntity extends BaseEntity {
+export class CommonEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
-  @Column()
+  @Column({ unique: true, length: 11 })
   uid: string;
   @ManyToOne(() => User)
   createdBy: User;

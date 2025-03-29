@@ -1,24 +1,12 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  ManyToOne,
-  BaseEntity,
-} from 'typeorm';
-import { Company } from '../company/company.entity';
+import { Entity, Column } from 'typeorm';
+import { CommonEntity } from 'src/shared/common-entity';
 
 @Entity()
-export class Packaging extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
-  @Column({ unique: true, length: 11 })
-  uid: string;
+export class Packaging extends CommonEntity {
   @Column()
   name: string;
   @Column({ nullable: true })
   description: string;
   @Column()
   pieces: number;
-  @ManyToOne(() => Company, (company) => company.packagings, { eager: true })
-  company: Company;
 }

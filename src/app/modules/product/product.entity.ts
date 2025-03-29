@@ -1,21 +1,9 @@
-import {
-  BaseEntity,
-  Column,
-  Entity,
-  ManyToOne,
-  OneToMany,
-  PrimaryColumn,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 import { InvoiceItem } from '../invoice/invoice-item.entity';
-import { Company } from '../company/company.entity';
+import { CommonEntity } from 'src/shared/common-entity';
 
 @Entity()
-export class Product extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
-  @PrimaryColumn({ unique: true, length: 11, nullable: false })
-  uid: string;
+export class Product extends CommonEntity {
   @Column({ unique: true, nullable: false })
   name: string;
   @Column({ nullable: true })
@@ -28,6 +16,4 @@ export class Product extends BaseEntity {
   imageUrl: string;
   @OneToMany(() => InvoiceItem, (item) => item.product)
   invoiceItems: InvoiceItem[];
-  @ManyToOne(() => Company, (company) => company.products)
-  company: Company;
 }

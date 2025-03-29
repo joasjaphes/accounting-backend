@@ -1,18 +1,8 @@
-import {
-  BaseEntity,
-  Column,
-  Entity,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-import { Company } from '../company/company.entity';
+import { CommonEntity } from 'src/shared/common-entity';
+import { Column, Entity } from 'typeorm';
 
 @Entity()
-export class PriceCategory extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
-  @Column({ unique: true, length: 11 })
-  uid: string;
+export class PriceCategory extends CommonEntity {
   @Column()
   name: string;
   @Column({ nullable: true })
@@ -23,6 +13,4 @@ export class PriceCategory extends BaseEntity {
   isDefault: boolean;
   @Column()
   status: string;
-  @ManyToOne(() => Company, (company) => company.priceCategories)
-  company: Company;
 }

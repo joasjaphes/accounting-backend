@@ -1,9 +1,11 @@
 import {
   BaseEntity,
   Column,
+  CreateDateColumn,
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { Company } from '../company/company.entity';
 
@@ -31,8 +33,16 @@ export class User extends BaseEntity {
   salt: string;
   @Column({ nullable: false, length: 50 })
   role: string;
-  @ManyToOne(() => Company, (company) => company.users, { eager: true })
+  @ManyToOne(() => User)
+  createdBy: User;
+  @ManyToOne(() => User)
+  updatedBy: User;
+  @ManyToOne(() => Company)
   company: Company;
+  @CreateDateColumn()
+  createdAt: Date;
+  @UpdateDateColumn()
+  updatedAt: Date;
 
   async validatePassword(password: string) {
     const hash = await bcrypt.hash(password, this.salt);

@@ -1,28 +1,15 @@
-import {
-  BaseEntity,
-  Column,
-  Entity,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-import { Company } from '../company/company.entity';
+import { Column, Entity, OneToMany } from 'typeorm';
 import { TransactionEntity } from '../transactions/transaction.entity';
+import { CommonEntity } from 'src/shared/common-entity';
 
 @Entity()
-export class Account extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
-  @Column({ unique: true, length: 11, nullable: false })
-  uid: string;
+export class Account extends CommonEntity {
   @Column({ nullable: false, unique: true })
   name: string;
   @Column({ nullable: true })
   description: string;
   @Column({ nullable: false })
   category: string;
-  @ManyToOne(() => Company, (company) => company.accounts)
-  company: Company;
   @OneToMany(() => TransactionEntity, (transaction) => transaction.account)
   transactions: TransactionEntity[];
 }

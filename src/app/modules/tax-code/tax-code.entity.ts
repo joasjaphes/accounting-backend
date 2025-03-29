@@ -1,19 +1,8 @@
-import {
-  BaseEntity,
-  Column,
-  Entity,
-  ManyToOne,
-  PrimaryColumn,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-import { Company } from '../company/company.entity';
+import { Column, Entity } from 'typeorm';
+import { CommonEntity } from 'src/shared/common-entity';
 
 @Entity()
-export class TaxCode extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
-  @PrimaryColumn({ length: 11 })
-  uid: string;
+export class TaxCode extends CommonEntity {
   @Column()
   name: string;
   @Column({ nullable: true })
@@ -28,6 +17,4 @@ export class TaxCode extends BaseEntity {
   salesAccount: string;
   @Column()
   purchasesAccount: string;
-  @ManyToOne(() => Company, (company) => company.taxCodes)
-  company: Company;
 }

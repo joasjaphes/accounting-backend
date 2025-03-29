@@ -1,20 +1,9 @@
-import {
-  BaseEntity,
-  Column,
-  Entity,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 import { TransactionEntity } from '../transactions/transaction.entity';
-import { Company } from '../company/company.entity';
+import { CommonEntity } from 'src/shared/common-entity';
 
 @Entity()
-export class JournalEntry extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
-  @Column({ nullable: false, unique: true, length: 11 })
-  uid: string;
+export class JournalEntry extends CommonEntity {
   @Column()
   date: string;
   @Column({ nullable: false })
@@ -23,6 +12,4 @@ export class JournalEntry extends BaseEntity {
     eager: true,
   })
   transactions: TransactionEntity[];
-  @ManyToOne(() => Company, (company) => company.journalEntries)
-  company: Company;
 }

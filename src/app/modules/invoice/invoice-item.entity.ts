@@ -1,21 +1,10 @@
-import {
-  BaseEntity,
-  Column,
-  Entity,
-  ManyToOne,
-  OneToMany,
-  PrimaryColumn,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, ManyToOne } from 'typeorm';
 import { Invoice } from './invoice.entity';
 import { Product } from '../product/product.entity';
+import { CommonEntity } from 'src/shared/common-entity';
 
 @Entity()
-export class InvoiceItem extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
-  @PrimaryColumn({ unique: true, length: 11, nullable: false })
-  uid: string;
+export class InvoiceItem extends CommonEntity {
   @Column({ nullable: false })
   amount: number;
   @Column({ nullable: false, default: 0 })

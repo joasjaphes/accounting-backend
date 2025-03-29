@@ -1,19 +1,8 @@
-import {
-  BaseEntity,
-  Column,
-  Entity,
-  ManyToOne,
-  PrimaryColumn,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
-import { Company } from '../company/company.entity';
+import { Column, Entity } from 'typeorm';
+import { CommonEntity } from 'src/shared/common-entity';
 
 @Entity()
-export class Store extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
-  @PrimaryColumn({ length: 11 })
-  uid: string;
+export class Store extends CommonEntity {
   @Column()
   name: string;
   @Column({ nullable: true })
@@ -26,6 +15,4 @@ export class Store extends BaseEntity {
   canIssueToOtherStores?: boolean;
   @Column()
   canReceivePurchaseOrder?: boolean;
-  @ManyToOne(() => Company, (company) => company.stores)
-  company: Company;
 }

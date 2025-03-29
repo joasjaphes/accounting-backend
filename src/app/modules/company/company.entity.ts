@@ -52,42 +52,4 @@ export class Company extends BaseEntity {
   logo: string;
   @Column({ nullable: true })
   efdSettings: string;
-  @OneToMany(() => User, (user) => user.company)
-  users: User[];
-  @OneToMany(() => Account, (account) => account.company)
-  accounts: Account[];
-  @OneToMany(() => TransactionEntity, (transaction) => transaction.company)
-  transactions: TransactionEntity[];
-  @OneToMany(() => Currency, (currency) => currency.company)
-  currencies: Currency[];
-  @OneToMany(() => Store, (store) => store.company)
-  stores: Store[];
-  @OneToMany(() => PaymentType, (paymentType) => paymentType.company)
-  paymentTypes: PaymentType[];
-  @OneToMany(() => TaxCode, (taxCode) => taxCode.company)
-  taxCodes: TaxCode[];
-  @OneToMany(
-    () => FinancialPeriod,
-    (financialPeriod) => financialPeriod.company,
-  )
-  financialPeriods: FinancialPeriod[];
-  @OneToMany(
-    () => ProductCategory,
-    (productCategory) => productCategory.company,
-  )
-  productCategories: ProductCategory[];
-  @OneToMany(() => Packaging, (packaging) => packaging.company)
-  packagings: Packaging[];
-  @OneToMany(() => BinLocation, (binLocation) => binLocation.company)
-  binLocations: BinLocation[];
-  @OneToMany(() => PriceCategory, (priceCategory) => priceCategory.company)
-  priceCategories: PriceCategory[];
-  @OneToMany(() => Product, (product) => product.company)
-  products: Product[];
-  @OneToMany(() => JournalEntry, (journalEntry) => journalEntry.company)
-  journalEntries: JournalEntry[];
-  @OneToMany(() => Invoice, (invoice) => invoice.company)
-  invoices: Invoice[];
-  @OneToMany(() => Customer, (customer) => customer.company)
-  customers: Customer[];
 }
