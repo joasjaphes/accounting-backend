@@ -9,7 +9,7 @@ services:
       POSTGRES_PASSWORD: accounting
       POSTGRES_USER: accounting
       POSTGRES_DB: accounting
-    network_mode: host
+    # network_mode: host
     volumes:
       - accounting-database:/var/lib/postgresql/data
 
@@ -24,9 +24,9 @@ services:
     volumes:
       - ./:/app
     # restart: always
-    network_mode: host
-    # ports:
-    #   - 3000:3000
+    # network_mode: host
+    ports:
+      - 3000:3000
     depends_on:
       - accounting-database
 volumes:
