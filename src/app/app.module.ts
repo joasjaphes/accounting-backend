@@ -7,11 +7,11 @@ import { entities } from 'src/database/entities';
 import { services } from 'src/database/services';
 import { controllers } from 'src/database/controllers';
 import { AuthGuard } from './guards/auth.guard';
-import { ProductService } from './product/product.service';
+import { ProductService } from './modules/product/product.service';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 
-const DATABASE_HOST = process.env.DATABASE_HOST || 'localhost';
+const DATABASE_HOST = process.env.DATABASE_HOST || 'accounting-database';
 const DATABASE_PORT: number =
   Number.parseInt(process.env.DATABASE_PORT) || 5432;
 const DATABASE_USERNAME = process.env.DATABASE_USERNAME || 'accounting';
