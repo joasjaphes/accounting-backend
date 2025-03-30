@@ -37,7 +37,7 @@ export class User extends BaseEntity {
   createdBy: User;
   @ManyToOne(() => User)
   updatedBy: User;
-  @ManyToOne(() => Company)
+  @ManyToOne(() => Company, null, { eager: true })
   company: Company;
   @CreateDateColumn()
   createdAt: Date;

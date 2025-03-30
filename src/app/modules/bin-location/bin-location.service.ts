@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { BinLocationDTO } from './bin-location.dto';
 import { throwIfEmpty } from 'rxjs';
 import { CompanyService } from '../company/company.service';
+import { User } from '../user/user.entity';
 
 @Injectable()
 export class BinLocationService {
@@ -15,6 +16,7 @@ export class BinLocationService {
 
   async createBinLocation(
     binLocationDTO: BinLocationDTO,
+    currentUser: User,
     companyUid?: string,
   ): Promise<BinLocation> {
     try {
@@ -22,6 +24,8 @@ export class BinLocationService {
       const company = await this.companyService.findCompanyByUid(
         companyUid || binLocationDTO.companyId,
       );
+      binLocation.createdBy = currentUser;
+      binLocation.updatedBy = currentUser;
       binLocation.company = company;
       return await binLocation.save();
     } catch (e) {
@@ -32,17 +36,19 @@ export class BinLocationService {
 
   async saveBinLocation(
     binLocationDTO: BinLocationDTO,
+    currentUser: User,
     companyUid,
   ): Promise<BinLocation> {
     try {
       const refBinLocation = await this.getBinLocationByUID(binLocationDTO.id);
       if (!refBinLocation) {
-        await this.createBinLocation(binLocationDTO, companyUid);
+        await this.createBinLocation(binLocationDTO, currentUser, companyUid);
       } else {
         const binLocationPayload = this.getBinLocationFromDTO(
           binLocationDTO,
           refBinLocation,
         );
+        binLocationPayload.updatedBy = currentUser;
         return await binLocationPayload.save();
       }
     } catch (e) {

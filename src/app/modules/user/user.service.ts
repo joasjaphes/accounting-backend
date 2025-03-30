@@ -112,6 +112,16 @@ export class UserService {
     }
   }
 
+  async getUserByUsername(username: string): Promise<User> {
+    try {
+      return await this.repository.findOne({ where: { username } });
+    } catch (e) {
+      console.error(e);
+      Logger.error('Failed to get user by username', e);
+      throw e;
+    }
+  }
+
   getUserDTOFromUSer(user: User): UserDTO {
     return {
       id: user.uid,

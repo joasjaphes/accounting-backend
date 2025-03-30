@@ -4,6 +4,7 @@ import { Account } from './account.entity';
 import { Repository } from 'typeorm';
 import { AccountDTO } from './account.dto';
 import { CompanyService } from '../company/company.service';
+import { User } from '../user/user.entity';
 
 @Injectable()
 export class AccountService {
@@ -15,12 +16,15 @@ export class AccountService {
   async createAccount(
     account: AccountDTO,
     companyUid?: string,
+    currentUser?: User,
   ): Promise<AccountDTO> {
     try {
       const accountPayload: Account = await this.getAccountPayloadFromDTO(
         account,
         companyUid,
       );
+      accountPayload.createdBy = currentUser;
+      accountPayload.updatedBy = currentUser;
       const createdAccount: Account = await this.repository.save(
         accountPayload,
       );
@@ -31,11 +35,15 @@ export class AccountService {
     }
   }
 
-  async updateAccount(account: AccountDTO): Promise<AccountDTO> {
+  async updateAccount(
+    account: AccountDTO,
+    currentUser: User,
+  ): Promise<AccountDTO> {
     try {
       const accountPayload: Account = await this.getAccountPayloadFromDTO(
         account,
       );
+      accountPayload.updatedBy = currentUser;
       const result = await this.repository.update(
         { uid: account.id },
         accountPayload,

@@ -2,7 +2,7 @@ version: '3.3'
 
 services:
   accounting-database:
-    image: postgres:9.6
+    image: postgres:14
     container_name: accounting-database
     # restart: always
     environment:
@@ -27,6 +27,17 @@ services:
     # network_mode: host
     ports:
       - 3000:3000
+    depends_on:
+      - accounting-database
+
+  accounting-pgadmin:
+    image: elestio/pgadmin:REL-8_13
+    container_name: accounting-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@accounting.com
+      PGADMIN_DEFAULT_PASSWORD: accounting
+    ports:
+      - 8001:80
     depends_on:
       - accounting-database
 volumes:

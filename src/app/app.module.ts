@@ -10,6 +10,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { ProductService } from './modules/product/product.service';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { CurrentUserInterceptor } from './interceptors/current-user.interceptor';
 
 const DATABASE_HOST = process.env.DATABASE_HOST || 'accounting-database';
 const DATABASE_PORT: number =
@@ -38,7 +39,13 @@ const DATABASE_TYPE: any = process.env.DATABASE_TYPE || 'postgres';
     }),
   ],
   controllers: [AppController, ...controllers],
-  providers: [AppService, ...services, AuthGuard, ProductService],
+  providers: [
+    AppService,
+    ...services,
+    AuthGuard,
+    ProductService,
+    CurrentUserInterceptor,
+  ],
 })
 export class AppModule {
   constructor() {
