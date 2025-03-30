@@ -1,9 +1,22 @@
-import { Body, Controller, Get, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Put,
+  Request,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { FinancialPeriodDTO } from './financial-period.dto';
 import { FinancialPeriodService } from './financial-period.service';
 import { CompanyUid } from '../../decorators/company.decorator';
 import { Company } from '../company/company.entity';
+import { AuthGuard } from 'src/app/guards/auth.guard';
+import { CurrentUserInterceptor } from 'src/app/interceptors/current-user.interceptor';
 
+@UseGuards(AuthGuard)
+@UseInterceptors(CurrentUserInterceptor)
 @Controller('financialPeriods')
 export class FinancialPeriodController {
   constructor(private financialPeriodService: FinancialPeriodService) {}
@@ -12,10 +25,12 @@ export class FinancialPeriodController {
   async createFinancialPeriod(
     @Body() financialPeriod: FinancialPeriodDTO,
     @CompanyUid() companyUid: string,
+    @Request() request,
   ) {
     try {
       return await this.financialPeriodService.saveFinancialPeriod(
         financialPeriod,
+        request.currentUser,
         companyUid,
       );
     } catch (e) {
@@ -25,10 +40,14 @@ export class FinancialPeriodController {
   }
 
   @Put()
-  async updateFinancialPeriod(@Body() financialPeriod: FinancialPeriodDTO) {
+  async updateFinancialPeriod(
+    @Body() financialPeriod: FinancialPeriodDTO,
+    @Request() request,
+  ) {
     try {
       return await this.financialPeriodService.saveFinancialPeriod(
         financialPeriod,
+        request.currentUser,
       );
     } catch (e) {
       console.error('Failed to update financial period', e);

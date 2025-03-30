@@ -1,8 +1,22 @@
-import { Body, Controller, Get, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Put,
+  Request,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { PaymentTypeDTO } from './payment-type.dto';
 import { PaymentTypeService } from './payment-type.service';
 import { CompanyUid } from '../../decorators/company.decorator';
+import { AuthGuard } from 'src/app/guards/auth.guard';
+import { CurrentUserInterceptor } from 'src/app/interceptors/current-user.interceptor';
+import { request } from 'http';
 
+@UseGuards(AuthGuard)
+@UseInterceptors(CurrentUserInterceptor)
 @Controller('paymentTypes')
 export class PaymentTypeController {
   constructor(private paymentTypeService: PaymentTypeService) {}
@@ -11,10 +25,12 @@ export class PaymentTypeController {
   async createPaymentType(
     @Body() paymentType: PaymentTypeDTO,
     @CompanyUid() companyUid: string,
+    @Request() request,
   ) {
     try {
       return await this.paymentTypeService.savePaymentType(
         paymentType,
+        request.currentUser,
         companyUid,
       );
     } catch (e) {
@@ -24,9 +40,15 @@ export class PaymentTypeController {
   }
 
   @Put()
-  async updatePaymentType(@Body() paymentType: PaymentTypeDTO) {
+  async updatePaymentType(
+    @Body() paymentType: PaymentTypeDTO,
+    @Request() request,
+  ) {
     try {
-      return await this.paymentTypeService.savePaymentType(paymentType);
+      return await this.paymentTypeService.savePaymentType(
+        paymentType,
+        request.currentUser,
+      );
     } catch (e) {
       console.error('Failed to update payment type', e);
       throw e;

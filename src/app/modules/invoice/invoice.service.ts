@@ -9,6 +9,7 @@ import { InvoiceItemDTO } from './invoice-item.dto';
 import { CustomerService } from '../customer/customer.service';
 import moment from 'moment';
 import { CompanyService } from '../company/company.service';
+import { User } from '../user/user.entity';
 
 @Injectable()
 export class InvoiceService {
@@ -21,7 +22,11 @@ export class InvoiceService {
     private companyService: CompanyService,
   ) {}
 
-  async createInvoice(invoicePayload: InvoiceDTO, companyUid?: string) {
+  async createInvoice(
+    invoicePayload: InvoiceDTO,
+    currentUser: User,
+    companyUid?: string,
+  ) {
     // console.log('invoice payload', invoicePayload);
     try {
       const invoice = this.getInvoicePayloadFromDTO(invoicePayload);
@@ -32,6 +37,8 @@ export class InvoiceService {
       invoice.company = await this.companyService.findCompanyByUid(
         companyUid || invoicePayload.companyId,
       );
+      invoice.createdBy = currentUser;
+      invoice.updatedBy = currentUser;
       const savedInvoice = await invoice.save();
       // await this.invoiceRepository.save([invoice]);
       await this.saveInvoiceItems(invoicePayload, invoice);

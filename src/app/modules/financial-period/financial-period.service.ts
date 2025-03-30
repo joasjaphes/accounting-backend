@@ -4,6 +4,7 @@ import { FinancialPeriod } from './financial-period.entity';
 import { Repository } from 'typeorm';
 import { FinancialPeriodDTO } from './financial-period.dto';
 import { CompanyService } from '../company/company.service';
+import { User } from '../user/user.entity';
 
 @Injectable()
 export class FinancialPeriodService {
@@ -15,6 +16,7 @@ export class FinancialPeriodService {
 
   async createFinancialPeriod(
     financialPeriodDTO: FinancialPeriodDTO,
+    currentUser: User,
     companyUid?: string,
   ) {
     try {
@@ -23,6 +25,8 @@ export class FinancialPeriodService {
       const company = await this.companyService.findCompanyByUid(
         companyUid || financialPeriodDTO.companyId,
       );
+      financialPeriod.createdBy = currentUser;
+      financialPeriod.updatedBy = currentUser;
       financialPeriod.company = company;
       return await financialPeriod.save();
     } catch (e) {
@@ -33,6 +37,7 @@ export class FinancialPeriodService {
 
   async saveFinancialPeriod(
     financialPeriodDTO: FinancialPeriodDTO,
+    currentUser: User,
     companyUid?: string,
   ) {
     try {
@@ -40,12 +45,17 @@ export class FinancialPeriodService {
         financialPeriodDTO.id,
       );
       if (!refFinancialPeriod) {
-        await this.createFinancialPeriod(financialPeriodDTO, companyUid);
+        await this.createFinancialPeriod(
+          financialPeriodDTO,
+          currentUser,
+          companyUid,
+        );
       } else {
         const updatedTaxCode = this.getFinancialPeriodFromFinancialPeriodDTO(
           financialPeriodDTO,
           refFinancialPeriod,
         );
+        updatedTaxCode.updatedBy = currentUser;
         return await updatedTaxCode.save();
       }
     } catch (e) {

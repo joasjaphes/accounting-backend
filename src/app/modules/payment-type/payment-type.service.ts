@@ -4,6 +4,7 @@ import { PaymentType } from './payment-type.entity';
 import { Repository } from 'typeorm';
 import { PaymentTypeDTO } from './payment-type.dto';
 import { CompanyService } from '../company/company.service';
+import { User } from '../user/user.entity';
 
 @Injectable()
 export class PaymentTypeService {
@@ -12,13 +13,19 @@ export class PaymentTypeService {
     private companyService: CompanyService,
   ) {}
 
-  async createPaymentType(paymentTypeDTO: PaymentTypeDTO, companyUid?: string) {
+  async createPaymentType(
+    paymentTypeDTO: PaymentTypeDTO,
+    currentUser: User,
+    companyUid?: string,
+  ) {
     try {
       const paymentType = this.getPaymentTypeFromDTO(paymentTypeDTO);
       const company = await this.companyService.findCompanyByUid(
         companyUid || paymentTypeDTO.companyId,
       );
       paymentType.company = company;
+      paymentType.createdBy = currentUser;
+      paymentType.updatedBy = currentUser;
       return await paymentType.save();
     } catch (e) {
       console.error('Failed to save payment type', e);
@@ -26,16 +33,21 @@ export class PaymentTypeService {
     }
   }
 
-  async savePaymentType(paymentTypeDTO: PaymentTypeDTO, companyUid?: string) {
+  async savePaymentType(
+    paymentTypeDTO: PaymentTypeDTO,
+    currentUser: User,
+    companyUid?: string,
+  ) {
     try {
       const refPaymentType = await this.findPaymentTypeByUID(paymentTypeDTO.id);
       if (!refPaymentType) {
-        await this.createPaymentType(paymentTypeDTO, companyUid);
+        await this.createPaymentType(paymentTypeDTO, currentUser, companyUid);
       } else {
         const updatedPaymentType = this.getPaymentTypeFromDTO(
           paymentTypeDTO,
           refPaymentType,
         );
+        updatedPaymentType.updatedBy = currentUser;
         return await updatedPaymentType.save();
       }
     } catch (e) {

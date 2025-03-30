@@ -4,6 +4,7 @@ import { Packaging } from './packaging.entity';
 import { PackagingDTO } from './packaging.dto';
 import { CompanyService } from '../company/company.service';
 import { Repository } from 'typeorm';
+import { User } from '../user/user.entity';
 
 @Injectable()
 export class PackagingService {
@@ -12,13 +13,19 @@ export class PackagingService {
     private companyService: CompanyService,
   ) {}
 
-  async createPackaging(packagingDTO: PackagingDTO, companyUid?: string) {
+  async createPackaging(
+    packagingDTO: PackagingDTO,
+    currentUser: User,
+    companyUid?: string,
+  ) {
     try {
       const packaging = this.getPackagingFromDTO(packagingDTO);
       const company = await this.companyService.findCompanyByUid(
         companyUid || packagingDTO.companyId,
       );
       packaging.company = company;
+      packaging.createdBy = currentUser;
+      packaging.updatedBy = currentUser;
       return await packaging.save();
     } catch (e) {
       console.error('Failed to create packaging', e);
@@ -26,16 +33,21 @@ export class PackagingService {
     }
   }
 
-  async savePackaging(packaging: PackagingDTO, companyUid?: string) {
+  async savePackaging(
+    packaging: PackagingDTO,
+    currentUser: User,
+    companyUid?: string,
+  ) {
     try {
       const refPackaging = await this.getPackagingByUID(packaging.id);
       if (!refPackaging) {
-        await this.createPackaging(packaging, companyUid);
+        await this.createPackaging(packaging, currentUser, companyUid);
       } else {
         const packagingPayload = this.getPackagingFromDTO(
           packaging,
           refPackaging,
         );
+        packagingPayload.updatedBy = currentUser;
         return await packagingPayload.save();
       }
     } catch (e) {

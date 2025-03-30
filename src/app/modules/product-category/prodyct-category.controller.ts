@@ -1,8 +1,22 @@
-import { Body, Controller, Get, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Put,
+  Request,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { ProductCategoryDTO } from './product-category.dto';
 import { ProductCategoryService } from './product-category.service';
 import { CompanyUid } from '../../decorators/company.decorator';
+import { AuthGuard } from 'src/app/guards/auth.guard';
+import { CurrentUserInterceptor } from 'src/app/interceptors/current-user.interceptor';
+import { request } from 'http';
 
+@UseGuards(AuthGuard)
+@UseInterceptors(CurrentUserInterceptor)
 @Controller('productCategories')
 export class ProductCategoryController {
   constructor(private productCategoriesService: ProductCategoryService) {}
@@ -11,10 +25,12 @@ export class ProductCategoryController {
   async createProductCategory(
     @Body() productCategory: ProductCategoryDTO,
     @CompanyUid() companyUid: string,
+    @Request() request,
   ) {
     try {
       return await this.productCategoriesService.saveProductCategory(
         productCategory,
+        request.currentUser,
         companyUid,
       );
     } catch (e) {
@@ -24,10 +40,14 @@ export class ProductCategoryController {
   }
 
   @Put()
-  async updateProductCategory(@Body() productCategory: ProductCategoryDTO) {
+  async updateProductCategory(
+    @Body() productCategory: ProductCategoryDTO,
+    @Request() request,
+  ) {
     try {
       return await this.productCategoriesService.saveProductCategory(
         productCategory,
+        request.currentUser,
       );
     } catch (e) {
       console.error('Failed to update product category', e);

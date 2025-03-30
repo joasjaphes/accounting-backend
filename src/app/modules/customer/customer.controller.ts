@@ -6,11 +6,18 @@ import {
   Param,
   Post,
   Put,
+  Request,
+  UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { CustomerService } from './customer.service';
 import { CustomerDTO } from './customer.dto';
 import { CompanyUid } from '../../decorators/company.decorator';
+import { AuthGuard } from 'src/app/guards/auth.guard';
+import { CurrentUserInterceptor } from 'src/app/interceptors/current-user.interceptor';
 
+@UseGuards(AuthGuard)
+@UseInterceptors(CurrentUserInterceptor)
 @Controller('customers')
 export class CustomerController {
   constructor(private customerService: CustomerService) {}
@@ -19,18 +26,26 @@ export class CustomerController {
   async createCustomer(
     @Body() customerDTO: CustomerDTO,
     @CompanyUid() companyUid: string,
+    @Request() request,
   ) {
     try {
-      return await this.customerService.createCustomer(customerDTO, companyUid);
+      return await this.customerService.createCustomer(
+        customerDTO,
+        request.currentUser,
+        companyUid,
+      );
     } catch (e) {
       throw e;
     }
   }
 
   @Put('')
-  async updateCustomer(@Body() customerDTO: CustomerDTO) {
+  async updateCustomer(@Body() customerDTO: CustomerDTO, @Request() request) {
     try {
-      return await this.customerService.updateCustomer(customerDTO);
+      return await this.customerService.updateCustomer(
+        customerDTO,
+        request.currentUser,
+      );
     } catch (e) {
       throw e;
     }

@@ -1,8 +1,21 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Request,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { PriceCategoryService } from './price-category.service';
 import { PriceCategoryDTO } from './price-category.dto';
 import { CompanyUid } from '../../decorators/company.decorator';
+import { AuthGuard } from 'src/app/guards/auth.guard';
+import { CurrentUserInterceptor } from 'src/app/interceptors/current-user.interceptor';
+import { request } from 'http';
 
+@UseGuards(AuthGuard)
+@UseInterceptors(CurrentUserInterceptor)
 @Controller('priceCategories')
 export class PriceCategoryController {
   constructor(private priceCategoryService: PriceCategoryService) {}
@@ -11,11 +24,13 @@ export class PriceCategoryController {
   async createPriceCategory(
     @Body() priceCategory: PriceCategoryDTO,
     @CompanyUid() companyUid: string,
+    @Request() request,
   ) {
     console.log('priceCategory', priceCategory);
     try {
       return await this.priceCategoryService.savePriceCategory(
         priceCategory,
+        request.currentUser,
         companyUid,
       );
     } catch (e) {

@@ -4,6 +4,7 @@ import { Store } from './store.entity';
 import { Repository } from 'typeorm';
 import { StoreDTO } from './store.dto';
 import { CompanyService } from '../company/company.service';
+import { User } from '../user/user.entity';
 
 @Injectable()
 export class StoreService {
@@ -12,13 +13,19 @@ export class StoreService {
     private companyService: CompanyService,
   ) {}
 
-  async createStore(storeDTO: StoreDTO, companyUid?: string) {
+  async createStore(
+    storeDTO: StoreDTO,
+    currentUser: User,
+    companyUid?: string,
+  ) {
     try {
       const store = this.getStoreFromDTO(storeDTO);
       const company = await this.companyService.findCompanyByUid(
         companyUid || storeDTO.companyId,
       );
       store.company = company;
+      store.createdBy = currentUser;
+      store.updatedBy = currentUser;
       return await store.save();
     } catch (e) {
       console.error('Failed to save store', e);
@@ -26,11 +33,11 @@ export class StoreService {
     }
   }
 
-  async saveStore(storeDTO: StoreDTO, companyUid?: string) {
+  async saveStore(storeDTO: StoreDTO, currentUser: User, companyUid?: string) {
     try {
       const refStore = await this.findStoreByUid(storeDTO.id);
       if (!refStore) {
-        await this.createStore(storeDTO, companyUid);
+        await this.createStore(storeDTO, currentUser, companyUid);
       } else {
         refStore.name = storeDTO.name;
         refStore.description = storeDTO.description;
@@ -38,6 +45,7 @@ export class StoreService {
         refStore.allowSales = storeDTO.allowSales;
         refStore.canIssueToOtherStores = storeDTO.canIssueToOtherStores;
         refStore.canReceivePurchaseOrder = storeDTO.canReceivePurchaseOrder;
+        refStore.updatedBy = currentUser;
         return await refStore.save();
       }
     } catch (e) {

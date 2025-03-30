@@ -4,6 +4,7 @@ import { TaxCode } from './tax-code.entity';
 import { Repository } from 'typeorm';
 import { TaxCodeDTO } from './tax-code.dto';
 import { CompanyService } from '../company/company.service';
+import { User } from '../user/user.entity';
 
 @Injectable()
 export class TaxCodeService {
@@ -12,13 +13,19 @@ export class TaxCodeService {
     private companyService: CompanyService,
   ) {}
 
-  async createTaxCode(taxCodeDTO: TaxCodeDTO, companyUid?: string) {
+  async createTaxCode(
+    taxCodeDTO: TaxCodeDTO,
+    currentUser: User,
+    companyUid?: string,
+  ) {
     try {
       const taxCode = this.getTaxCodeFromTaxCodeDTO(taxCodeDTO);
       const company = await this.companyService.findCompanyByUid(
         companyUid || taxCodeDTO.companyId,
       );
       taxCode.company = company;
+      taxCode.createdBy = currentUser;
+      taxCode.updatedBy = currentUser;
       return await taxCode.save();
     } catch (e) {
       console.error('Failed to save tax code', e);
@@ -26,16 +33,21 @@ export class TaxCodeService {
     }
   }
 
-  async saveTaxCode(taxCodeDTO: TaxCodeDTO, companyUid?: string) {
+  async saveTaxCode(
+    taxCodeDTO: TaxCodeDTO,
+    currentUser: User,
+    companyUid?: string,
+  ) {
     try {
       const refTaxCode = await this.findTaxCodeByUid(taxCodeDTO.id);
       if (!refTaxCode) {
-        await this.createTaxCode(taxCodeDTO, companyUid);
+        await this.createTaxCode(taxCodeDTO, currentUser, companyUid);
       } else {
         const updatedTaxCode = this.getTaxCodeFromTaxCodeDTO(
           taxCodeDTO,
           refTaxCode,
         );
+        updatedTaxCode.updatedBy = currentUser;
         return await updatedTaxCode.save();
       }
     } catch (e) {

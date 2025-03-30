@@ -4,6 +4,7 @@ import { PriceCategory } from './price-category.entity';
 import { Repository } from 'typeorm';
 import { CompanyService } from '../company/company.service';
 import { PriceCategoryDTO } from './price-category.dto';
+import { User } from '../user/user.entity';
 
 @Injectable()
 export class PriceCategoryService {
@@ -15,6 +16,7 @@ export class PriceCategoryService {
 
   async createPriceCategory(
     priceCategoryDTO: PriceCategoryDTO,
+    currentUser: User,
     companyUid?: string,
   ) {
     try {
@@ -23,6 +25,8 @@ export class PriceCategoryService {
         companyUid || priceCategoryDTO.companyId,
       );
       priceCategory.company = company;
+      priceCategory.createdBy = currentUser;
+      priceCategory.updatedBy = currentUser;
       return await priceCategory.save();
     } catch (e) {
       console.error('Failed to create price category', e);
@@ -32,6 +36,7 @@ export class PriceCategoryService {
 
   async savePriceCategory(
     priceCategoryDTO: PriceCategoryDTO,
+    currentUser: User,
     companyUid: string,
   ) {
     try {
@@ -39,12 +44,17 @@ export class PriceCategoryService {
         priceCategoryDTO.id,
       );
       if (!refPriceCategory) {
-        await this.createPriceCategory(priceCategoryDTO, companyUid);
+        await this.createPriceCategory(
+          priceCategoryDTO,
+          currentUser,
+          companyUid,
+        );
       } else {
         const payload = this.getPriceCategoryFromDTO(
           priceCategoryDTO,
           refPriceCategory,
         );
+        payload.updatedBy = currentUser;
         return await payload.save();
       }
     } catch (e) {

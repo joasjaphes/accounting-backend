@@ -4,6 +4,7 @@ import { Currency } from './currency.entity';
 import { Repository } from 'typeorm';
 import { CurrencyDTO } from './currency.dto';
 import { CompanyService } from '../company/company.service';
+import { User } from '../user/user.entity';
 
 @Injectable()
 export class CurrencyService {
@@ -12,12 +13,18 @@ export class CurrencyService {
     private companyService: CompanyService,
   ) {}
 
-  async createCurrency(currencyDTO: CurrencyDTO, companyUid?: string) {
+  async createCurrency(
+    currencyDTO: CurrencyDTO,
+    currentUser: User,
+    companyUid?: string,
+  ) {
     try {
       const currency = this.getCurrencyFromDTO(currencyDTO);
       const company = await this.companyService.findCompanyByUid(
         companyUid || currencyDTO.companyId,
       );
+      currency.createdBy = currentUser;
+      currency.updatedBy = currentUser;
       currency.company = company;
       return await currency.save();
     } catch (e) {
@@ -26,13 +33,18 @@ export class CurrencyService {
     }
   }
 
-  async saveCurrency(currencyDTO: CurrencyDTO, companyUid?: string) {
+  async saveCurrency(
+    currencyDTO: CurrencyDTO,
+    currentUser: User,
+    companyUid?: string,
+  ) {
     try {
       const refCurrency = await this.findCurrencyByUid(currencyDTO.id);
       if (!refCurrency) {
-        await this.createCurrency(currencyDTO, companyUid);
+        await this.createCurrency(currencyDTO, currentUser, companyUid);
       } else {
         const payload = this.getCurrencyFromDTO(currencyDTO, refCurrency);
+        payload.updatedBy = currentUser;
         return await payload.save();
       }
     } catch (e) {

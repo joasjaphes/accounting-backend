@@ -1,8 +1,22 @@
-import { Body, Controller, Get, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Put,
+  Request,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { TaxCodeDTO } from './tax-code.dto';
 import { TaxCodeService } from './tax-code.service';
 import { CompanyUid } from '../../decorators/company.decorator';
+import { AuthGuard } from 'src/app/guards/auth.guard';
+import { CurrentUserInterceptor } from 'src/app/interceptors/current-user.interceptor';
+import { request } from 'http';
 
+@UseGuards(AuthGuard)
+@UseInterceptors(CurrentUserInterceptor)
 @Controller('taxCodes')
 export class TaxCodeController {
   constructor(private taxCodeService: TaxCodeService) {}
@@ -11,9 +25,14 @@ export class TaxCodeController {
   async createTaxCode(
     @Body() taxCode: TaxCodeDTO,
     @CompanyUid() companyUid: string,
+    @Request() request,
   ) {
     try {
-      return await this.taxCodeService.saveTaxCode(taxCode, companyUid);
+      return await this.taxCodeService.saveTaxCode(
+        taxCode,
+        request.currentUser,
+        companyUid,
+      );
     } catch (e) {
       console.error('Failed to create tax code', e);
       throw e;
@@ -21,9 +40,12 @@ export class TaxCodeController {
   }
 
   @Put()
-  async updateTaxCode(@Body() taxCode: TaxCodeDTO) {
+  async updateTaxCode(@Body() taxCode: TaxCodeDTO, @Request() request) {
     try {
-      return await this.taxCodeService.saveTaxCode(taxCode);
+      return await this.taxCodeService.saveTaxCode(
+        taxCode,
+        request.currentUser,
+      );
     } catch (e) {
       console.error('Failed to update tax code', e);
       throw e;

@@ -4,6 +4,7 @@ import { ProductCategory } from './product-category.entity';
 import { Repository } from 'typeorm';
 import { ProductCategoryDTO } from './product-category.dto';
 import { CompanyService } from '../company/company.service';
+import { User } from '../user/user.entity';
 
 @Injectable()
 export class ProductCategoryService {
@@ -15,6 +16,7 @@ export class ProductCategoryService {
 
   async createProductCategory(
     productCategoryDTO: ProductCategoryDTO,
+    currentUser: User,
     companyUid?: string,
   ) {
     try {
@@ -24,6 +26,8 @@ export class ProductCategoryService {
         companyUid || productCategoryDTO.companyId,
       );
       productCategory.company = company;
+      productCategory.createdBy = currentUser;
+      productCategory.updatedBy = currentUser;
       return await productCategory.save();
     } catch (e) {
       console.error('Failed to create product category', e);
@@ -33,6 +37,7 @@ export class ProductCategoryService {
 
   async saveProductCategory(
     productCategoryDTO: ProductCategoryDTO,
+    currentUser: User,
     companyUid?: string,
   ) {
     try {
@@ -40,7 +45,11 @@ export class ProductCategoryService {
         productCategoryDTO.id,
       );
       if (!refProductCategory) {
-        await this.createProductCategory(productCategoryDTO, companyUid);
+        await this.createProductCategory(
+          productCategoryDTO,
+          currentUser,
+          companyUid,
+        );
       } else {
         refProductCategory.name = productCategoryDTO.name;
         refProductCategory.description = productCategoryDTO.description;
@@ -50,6 +59,7 @@ export class ProductCategoryService {
         refProductCategory.purchasingTax = productCategoryDTO.purchasingTax;
         refProductCategory.salesAccount = productCategoryDTO.salesAccount;
         refProductCategory.salesTax = productCategoryDTO.salesTax;
+        refProductCategory.updatedBy = currentUser;
         return await refProductCategory.save();
       }
     } catch (e) {

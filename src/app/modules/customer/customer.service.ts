@@ -4,6 +4,7 @@ import { Customer } from './customer.entity';
 import { Repository } from 'typeorm';
 import { CustomerDTO } from './customer.dto';
 import { CompanyService } from '../company/company.service';
+import { User } from '../user/user.entity';
 
 @Injectable()
 export class CustomerService {
@@ -12,12 +13,18 @@ export class CustomerService {
     private companyService: CompanyService,
   ) {}
 
-  async createCustomer(customerPayload: CustomerDTO, companyUid?: string) {
+  async createCustomer(
+    customerPayload: CustomerDTO,
+    currentUser: User,
+    companyUid?: string,
+  ) {
     try {
       const customer = this.getCustomerObjectFromDTO(customerPayload);
       const company = await this.companyService.findCompanyByUid(
         companyUid || customerPayload.companyId,
       );
+      customer.createdBy = currentUser;
+      customer.updatedBy = currentUser;
       customer.company = company;
       return await customer.save();
     } catch (e) {
@@ -25,13 +32,14 @@ export class CustomerService {
     }
   }
 
-  async updateCustomer(customerPayload: CustomerDTO) {
+  async updateCustomer(customerPayload: CustomerDTO, currentUser: User) {
     try {
       const customer = await this.findCustomerByUID(customerPayload.id);
       customer.name = customerPayload.name;
       customer.address = customerPayload.address;
       customer.phoneNumber = customerPayload.phoneNumber;
       customer.email = customerPayload.email;
+      customer.updatedBy = currentUser;
       return await customer.save();
     } catch (e) {
       throw e;
