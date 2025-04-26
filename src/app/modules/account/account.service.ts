@@ -25,6 +25,13 @@ export class AccountService {
       );
       accountPayload.createdBy = currentUser;
       accountPayload.updatedBy = currentUser;
+      if (account.parent) {
+        const parentAccount = await this.getOneAccount(account.parent);
+        accountPayload.parent = parentAccount;
+        accountPayload.level = parentAccount.level + 1;
+      } else {
+        accountPayload.level = 1;
+      }
       const createdAccount: Account = await this.repository.save(
         accountPayload,
       );
@@ -99,6 +106,9 @@ export class AccountService {
       description: account?.description,
       category: account?.category,
       company: account?.company?.uid,
+      code: account?.code,
+      level: account?.level,
+      parent: account?.parent?.uid,
     };
   }
 

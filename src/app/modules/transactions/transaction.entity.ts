@@ -12,7 +12,7 @@ export class TransactionEntity extends CommonEntity {
   type: TransactionType;
   @Column()
   date: string;
-  @ManyToOne(() => Account, (account) => account.transactions, { eager: true })
+  @ManyToOne(() => Account, { eager: true })
   account: Account;
   @ManyToOne(() => JournalEntry, (journal) => journal.transactions)
   journal: JournalEntry;

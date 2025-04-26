@@ -1,15 +1,18 @@
-import { Column, Entity, OneToMany } from 'typeorm';
-import { TransactionEntity } from '../transactions/transaction.entity';
+import { Column, Entity, OneToOne } from 'typeorm';
 import { CommonEntity } from 'src/shared/common-entity';
 
 @Entity()
 export class Account extends CommonEntity {
-  @Column({ nullable: false, unique: true })
+  @Column({ nullable: false, unique: true, length: 50 })
   name: string;
   @Column({ nullable: true })
   description: string;
+  @Column({ length: 3 })
+  code: string;
+  @Column({ nullable: false })
+  level: number;
+  @OneToOne(() => Account)
+  parent: Account;
   @Column({ nullable: false })
   category: string;
-  @OneToMany(() => TransactionEntity, (transaction) => transaction.account)
-  transactions: TransactionEntity[];
 }

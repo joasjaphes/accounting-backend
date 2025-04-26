@@ -4,5 +4,8 @@ export interface AccountDTO {
   name: string;
   description: string;
   category: string;
+  parent?: string;
+  code: string;
+  level: number;
   company: string;
 }
