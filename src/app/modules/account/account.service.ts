@@ -27,7 +27,12 @@ export class AccountService {
       accountPayload.updatedBy = currentUser;
       if (account.parent) {
         const parentAccount = await this.getOneAccount(account.parent);
+        if (!parentAccount) {
+          throw new Error('Parent account not found');
+        }
         accountPayload.parent = parentAccount;
+
+        // accountPayload.parent = parentAccount.uid;
         accountPayload.level = parentAccount.level + 1;
       } else {
         accountPayload.level = 1;
@@ -66,6 +71,7 @@ export class AccountService {
   async getAllAccounts(companyUid): Promise<AccountDTO[]> {
     try {
       const accounts: Account[] = await this.repository.find({
+        relations: ['parent'],
         where: { company: { uid: companyUid } },
       });
       return accounts.map((account) => this.getAccountDTOFromPayload(account));
@@ -78,6 +84,7 @@ export class AccountService {
   async getOneAccount(uid: string): Promise<Account> {
     try {
       const account: Account = await this.repository.findOne({
+        relations: ['parent'],
         where: { uid },
       });
       return account;

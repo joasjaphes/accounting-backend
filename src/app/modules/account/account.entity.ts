@@ -1,4 +1,11 @@
-import { Column, Entity, OneToOne } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  OneToOne,
+} from 'typeorm';
 import { CommonEntity } from 'src/shared/common-entity';
 
 @Entity()
@@ -7,12 +14,13 @@ export class Account extends CommonEntity {
   name: string;
   @Column({ nullable: true })
   description: string;
-  @Column({ length: 3 })
+  @Column({ nullable: true })
   code: string;
   @Column({ nullable: false })
   level: number;
-  @OneToOne(() => Account)
+  @ManyToOne(() => Account)
+  @JoinColumn()
   parent: Account;
-  @Column({ nullable: false })
+  @Column()
   category: string;
 }
